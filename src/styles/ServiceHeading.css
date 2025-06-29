@@ -1,0 +1,154 @@
+.service-heading-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 2rem 0;
+}
+
+.service-heading-wrapper {
+  position: relative;
+  z-index: 2;
+}
+
+.service-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.5rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.static-text {
+  display: block;
+  color: #ffffff;
+}
+
+.animated-text-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 4rem;
+}
+
+.animated-text {
+  display: flex;
+  align-items: center;
+  min-height: 4rem;
+}
+
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.service-icon {
+  width: 2rem;
+  height: 2rem;
+  opacity: 0;
+  animation: fadeInIcon 0.6s forwards;
+  animation-delay: 0.15s;
+  color: var(--accent-color, #ffffff);
+}
+
+.animated-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px) scale(0.8);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease;
+}
+
+.animated-char.animate {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.animated-char.animate {
+  animation-delay: calc(var(--char-index) * 0.05s + 0.2s);
+}
+
+.particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.3;
+  background-image: 
+    radial-gradient(circle at 25% 25%, var(--accent-color, rgba(255, 255, 255, 0.3)) 2%, transparent 10%),
+    radial-gradient(circle at 75% 75%, var(--accent-color, rgba(255, 255, 255, 0.3)) 2%, transparent 10%),
+    radial-gradient(circle at 35% 65%, var(--accent-color, rgba(255, 255, 255, 0.3)) 3%, transparent 12%),
+    radial-gradient(circle at 65% 35%, var(--accent-color, rgba(255, 255, 255, 0.3)) 3%, transparent 12%);
+  background-size: 100px 100px;
+  filter: blur(4px);
+  animation: particleMove 10s infinite alternate ease-in-out;
+}
+
+@keyframes fadeInIcon {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes particleMove {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+@media (min-width: 640px) {
+  .service-heading {
+    flex-direction: row;
+    text-align: left;
+  }
+  
+  .service-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .service-heading {
+    font-size: 3.5rem;
+  }
+  
+  .animated-text-container {
+    min-height: 5rem;
+  }
+  
+  .animated-text {
+    min-height: 5rem;
+  }
+  
+  .service-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .service-heading {
+    font-size: 4rem;
+    gap: 1rem;
+  }
+  
+  .service-icon {
+    width: 3rem;
+    height: 3rem;
+  }
+}
