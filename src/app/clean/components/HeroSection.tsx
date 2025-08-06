@@ -1,180 +1,437 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Sparkles } from 'lucide-react';
+'use client'
 
-interface HeroSectionProps {
-  backgroundImage?: string;
-  gradientOpacity?: number; // 0-1 range
-  gradientFrom?: string;
-  gradientVia?: string;
-  gradientTo?: string;
+import React, { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
+import { Sparkle, ChevronLeft, ChevronRight } from 'lucide-react'
+
+// ===== TYPE DEFINITIONS =====
+type ServiceCategory = 'grooming' | 'cleaning' | 'bike'
+type BadgeColor = 'red' | 'green' | 'blue' | 'yellow' | 'purple'
+
+interface Service {
+  title: string
+  iconSrc: string
+  description: string
+  badge?: {
+    text: string
+    color: BadgeColor
+  }
+  category: ServiceCategory
 }
 
-const HeroSection: React.FC<HeroSectionProps> = ({
-  backgroundImage = '/photo-collage.png.png',
-  gradientOpacity = 0.3, // Lighter default gradient
-  gradientFrom = 'from-indigo-900',
-  gradientVia = 'via-blue-800',
-  gradientTo = 'to-cyan-800'
-}) => {
-  const [scrollY, setScrollY] = useState(0);
-  const heroRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+interface VideoSlide {
+  id: number
+  title: string
+  description: string
+  videoUrl: string
+  poster: string
+  category: ServiceCategory
+}
 
-  // Handle scroll effects
+interface CategoryConfig {
+  name: string
+  buttonColor: string
+}
+
+interface HeroConfig {
+  header: {
+    badge: {
+      icon: React.ReactNode
+      text: string
+      bgColor: string
+      textColor: string
+    }
+    title: string
+    titleHighlight: string
+    highlightColor: string
+    description: string
+  }
+  categories: Record<ServiceCategory, CategoryConfig>
+  services: Service[]
+  videoSlides: VideoSlide[]
+  buttons: {
+    explore: string
+    contact: string
+  }
+  colors: {
+    badge: Record<BadgeColor, string>
+    serviceCard: Record<ServiceCategory, string>
+  }
+}
+
+// ===== CONFIGURATION =====
+const heroConfig: HeroConfig = {
+  header: {
+    badge: {
+      icon: <Sparkle className="w-4 h-4" />,
+      text: "Trusted Home Services",
+      bgColor: "bg-cyan-50 dark:bg-cyan-900/20",
+      textColor: "text-cyan-700 dark:text-cyan-300"
+    },
+    title: "Home services at your",
+    titleHighlight: "doorstep",
+    highlightColor: "text-cyan-600",
+    description: "Professional services delivered to your home. Book trusted experts for cleaning, beauty, repairs, and more."
+  },
+  categories: {
+    bike: {
+      name: "Bike Services",
+      buttonColor: "bg-blue-500 hover:bg-blue-600"
+    },
+    cleaning: {
+      name: "Cleaning",
+      buttonColor: "bg-green-500 hover:bg-green-600"
+    },
+    grooming: {
+      name: "Grooming",
+      buttonColor: "bg-pink-500 hover:bg-pink-600"
+    },
+  },
+  services: [
+    {
+      title: 'Book a Bike Ride',
+      iconSrc: '/bike.png',
+      description: 'Fast and affordable rides for daily travel',
+      category: 'bike'
+    },
+    {
+      title: 'Become a Rider',
+      iconSrc: '/raider.png',
+      description: 'Join as a captain and start earning today',
+      category: 'bike'
+    },
+    {
+      title: 'Home Cleaning',
+      iconSrc: '/house-cleaning.png',
+      description: 'Deep cleaning for your living space',
+      category: 'cleaning'
+    },
+    {
+      title: 'Car Cleaning',
+      iconSrc: '/car.png',
+      description: 'Professional detailing inside & out',
+      category: 'cleaning',
+      badge: {
+        text: 'Sale',
+        color: 'red'
+      }
+    },
+    {
+      title: 'Hair Grooming',
+      iconSrc: '/wax.png',
+      description: 'Professional styling for men & women',
+      category: 'grooming',
+      badge: {
+        text: 'Popular',
+        color: 'green'
+      }
+    },
+    {
+      title: 'Pet Grooming',
+      iconSrc: '/pet.png',
+      description: 'Spa treatments for your pets',
+      category: 'grooming'
+    }
+  ],
+  videoSlides: [
+    {
+      id: 1,
+      title: 'Premium Grooming Services',
+      description: 'Professional stylists at your doorstep',
+      videoUrl: '/groom.mp4',
+      poster: '/home-salon-service.png',
+      category: 'grooming'
+    },
+    {
+      id: 2,
+      title: 'Deep Cleaning Solutions',
+      description: 'Spotless results every time',
+      videoUrl: '/clea.mp4',
+      poster: '/cleaning-poster.jpg',
+      category: 'cleaning'
+    },
+    {
+      id: 3,
+      title: 'Bike Riding Experiences',
+      description: 'Adventure awaits on two wheels',
+      videoUrl: '/PixVerse_V4.5_Image_Text_360P_create_a_concept.mp4',
+      poster: '/bike-poster.jpg',
+      category: 'bike'
+    }
+  ],
+  buttons: {
+    explore: "Explore Services",
+    contact: "Contact Us"
+  },
+  colors: {
+    badge: {
+      red: 'bg-red-500 text-white',
+      green: 'bg-green-500 text-white',
+      blue: 'bg-blue-500 text-white',
+      yellow: 'bg-yellow-500 text-white',
+      purple: 'bg-purple-500 text-white'
+    },
+    serviceCard: {
+      grooming: 'bg-gradient-to-br from-pink-50 to-pink-100 hover:from-pink-100 hover:to-pink-150',
+      cleaning: 'bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-150',
+      bike: 'bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-150'
+    }
+  }
+}
+
+const HeroSection = () => {
+  const router = useRouter()
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [activeCategory, setActiveCategory] = useState<'all' | ServiceCategory>('all')
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+  const [fadeClass, setFadeClass] = useState('')
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  // Auto-advance slides with fade effect
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
+    if (!isAutoPlaying) return
+    
+    const interval = setInterval(() => {
+      setFadeClass('opacity-0')
+      setTimeout(() => {
+        setCurrentSlide((prev) => (prev + 1) % heroConfig.videoSlides.length)
+        setFadeClass('opacity-100')
+      }, 300)
+    }, 8000)
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    return () => clearInterval(interval)
+  }, [isAutoPlaying])
 
-  // Handle mouse movement for parallax
+  // Play video when slide changes
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: e.clientX / window.innerWidth,
-        y: e.clientY / window.innerHeight,
-      });
-    };
+    if (videoRef.current) {
+      videoRef.current.load()
+      videoRef.current.play().catch(e => console.log("Autoplay prevented:", e))
+    }
+  }, [currentSlide])
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  // Navigation functions with fade effect
+  const navigateSlide = (direction: 'next' | 'prev' | number) => {
+    setIsAutoPlaying(false)
+    setFadeClass('opacity-0')
+    
+    setTimeout(() => {
+      if (typeof direction === 'number') {
+        setCurrentSlide(direction)
+      } else {
+        setCurrentSlide(prev =>
+          direction === 'next'
+            ? (prev + 1) % heroConfig.videoSlides.length
+            : (prev - 1 + heroConfig.videoSlides.length) % heroConfig.videoSlides.length
+        )
+      }
+      setFadeClass('opacity-100')
+    }, 300)
+    
+    // Resume auto-play after 8 seconds
+    setTimeout(() => setIsAutoPlaying(true), 8000)
+  }
 
-  // Calculate parallax and opacity effects
-  const calculateParallax = (factor: number) => {
-    return scrollY * factor;
-  };
+  // Filter services by category
+  const filteredServices = activeCategory === 'all'
+    ? heroConfig.services
+    : heroConfig.services.filter(service => service.category === activeCategory)
 
-  const parallaxBg = {
-    transform: `translate(${(mousePosition.x - 0.5) * -20}px, ${(mousePosition.y - 0.5) * -20}px)`,
-  };
+  const handleServiceClick = (service: Service) => {
+    router.push(`/services/${service.category}/${service.title.toLowerCase().replace(/\s+/g, '-')}`)
+  }
 
-  const parallaxContent = {
-    transform: `translateY(${calculateParallax(-0.2)}px)`,
-    opacity: Math.max(0, 1 - scrollY / 500),
-  };
-
-  // Service statistics with animation
-  const stats = [
-    { value: '98%', label: 'Satisfaction', icon: '✨' },
-    { value: '24/7', label: 'Support', icon: '🕒' },
-    { value: '1000+', label: 'Clients', icon: '👥' },
-    { value: '15+', label: 'Years', icon: '🏆' },
-  ];
+  const currentSlideData = heroConfig.videoSlides[currentSlide]
 
   return (
-    <div className="relative h-screen w-full overflow-hidden" ref={heroRef}>
-      {/* Background layers */}
-      <div className="absolute inset-0 transition-transform duration-700 ease-out" style={parallaxBg}>
-        {/* Background image - now fully visible */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ 
-            backgroundImage: `url(${backgroundImage})`,
-          }}
-        />
-        
-        {/* Optional subtle gradient overlay */}
-        <div 
-          className={`absolute inset-0 bg-gradient-to-br ${gradientFrom} ${gradientVia} ${gradientTo}`}
-          style={{ opacity: gradientOpacity }}
-        />
-      </div>
-
-      {/* Animated particles */}
-      <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 30 }).map((_, i) => {
-          const size = Math.random() * 60 + 5;
-          const speed = Math.random() * 15 + 10;
-          const initialX = Math.random() * 100;
-          const initialY = Math.random() * 100;
-          const direction = Math.random() > 0.5 ? 1 : -1;
-          
-          return (
-            <div
-              key={i}
-              className="absolute rounded-full bg-cyan-300/10 backdrop-blur-sm"
-              style={{
-                width: size,
-                height: size,
-                left: `${initialX}%`,
-                top: `${initialY}%`,
-                animation: `float-${direction > 0 ? 'right' : 'left'} ${speed}s infinite ease-in-out`,
-                animationDelay: `${Math.random() * 5}s`,
-              }}
-            />
-          );
-        })}
-      </div>
-
-      {/* Content section */}
-      <div 
-        className="relative h-full w-full flex flex-col items-center justify-center px-4"
-        style={parallaxContent}
-      >
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center space-x-2 bg-indigo-400/10 backdrop-blur-sm px-4 py-2 rounded-full mb-8 animate-fadeIn">
-            <Sparkles className="h-5 w-5 text-indigo-300" />
-            <span className="text-indigo-300 font-medium">Premium Services</span>
+    <section className="w-full min-h-screen bg-white dark:bg-gray-900 flex flex-col lg:flex-row">
+      {/* Left Content - Services */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-center px-6 md:px-12 lg:px-16 py-12 lg:py-20">
+        <div className="max-w-lg">
+          {/* Premium Badge */}
+          <div className={`flex items-center gap-2 ${heroConfig.header.badge.bgColor} ${heroConfig.header.badge.textColor} px-4 py-2 rounded-full w-max mb-8`}>
+            {heroConfig.header.badge.icon}
+            <span className="font-medium text-sm">{heroConfig.header.badge.text}</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-4 leading-none tracking-tight animate-revealFromBottom">
-            Transform Your Space
-            <span className="block text-cyan-300 mt-2 animate-revealFromRight">
-              With Expert Care
-            </span>
+          {/* Main Heading */}
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
+            {heroConfig.header.title}{' '}
+            <span className={heroConfig.header.highlightColor}>{heroConfig.header.titleHighlight}</span>
           </h1>
 
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto mb-12 opacity-90 animate-fadeIn delay-300">
-            Experience unmatched quality in cleaning and grooming services, tailored to your needs and schedule.
+          {/* Description */}
+          <p className="text-gray-600 dark:text-gray-300 text-lg mb-8">
+            {heroConfig.header.description}
           </p>
-          
-          <div 
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mb-12"
-            ref={statsRef}
-          >
-            {stats.map((stat, index) => (
-              <div 
-                key={index} 
-                className="flex flex-col items-center animate-fadeInUp"
-                style={{ animationDelay: `${index * 150 + 500}ms` }}
+
+          {/* Category Filters */}
+          <div className="flex flex-wrap gap-3 mb-6">
+            <button
+              onClick={() => setActiveCategory('all')}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                activeCategory === 'all' 
+                  ? 'bg-gray-900 text-white' 
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+              }`}
+            >
+              All Services
+            </button>
+            {(Object.keys(heroConfig.categories) as ServiceCategory[]).map((category) => (
+              <button
+                key={category}
+                onClick={() => setActiveCategory(category)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  activeCategory === category 
+                    ? heroConfig.categories[category].buttonColor + ' text-white' 
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                }`}
               >
-                <div className="text-3xl md:text-4xl font-bold text-white">{stat.value}</div>
-                <div className="flex items-center text-cyan-200 mt-1">
-                  <span className="mr-1">{stat.icon}</span>
-                  <span>{stat.label}</span>
-                </div>
-              </div>
+                {heroConfig.categories[category].name}
+              </button>
             ))}
           </div>
-          
-          <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fadeIn delay-700">
-            <button className="bg-white text-indigo-900 py-3 px-8 rounded-full font-medium text-lg transition-all duration-300 hover:bg-opacity-90 hover:shadow-lg">
-              Explore Services
+
+          {/* Service Categories */}
+          <div className="mb-12">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+              What are you looking for?
+            </h3>
+            
+            <div className="grid grid-cols-2 gap-4">
+              {filteredServices.map((service, idx) => (
+                <div
+                  key={idx}
+                  onClick={() => handleServiceClick(service)}
+                  className="relative group cursor-pointer transition-all duration-200"
+                >
+                  <div className={`${heroConfig.colors.serviceCard[service.category]} dark:bg-gray-800 dark:hover:bg-gray-700 rounded-xl p-4 h-full transition-all duration-300 group-hover:shadow-lg border border-gray-100 dark:border-gray-700`}>
+                    {service.badge && (
+                      <div className={`absolute -top-2 -right-2 px-2 py-1 rounded-full text-xs font-medium ${heroConfig.colors.badge[service.badge.color]}`}>
+                        {service.badge.text}
+                      </div>
+                    )}
+                    
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-white dark:bg-gray-700 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform shadow-sm">
+                        <img 
+                          src={service.iconSrc || "/placeholder.svg"} 
+                          alt={service.title} 
+                          className="w-6 h-6 object-contain"
+                          onError={(e) => {
+                            e.currentTarget.src = "/placeholder.svg?height=24&width=24&text=" + service.title.charAt(0)
+                          }}
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-1">
+                          {service.title}
+                        </h4>
+                        <p className="text-gray-500 dark:text-gray-400 text-xs leading-relaxed">
+                          {service.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Action Buttons - Both Visible */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button
+              onClick={() => router.push('/services')}
+              className="bg-cyan-600 hover:bg-cyan-700 text-white py-3 px-8 rounded-full font-semibold transition-all duration-200 hover:shadow-lg"
+            >
+              {heroConfig.buttons.explore}
             </button>
-            <button className="bg-transparent border-2 border-white text-white py-3 px-8 rounded-full font-medium text-lg backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:shadow-lg">
-              Contact Us
+            <button
+              onClick={() => router.push('/contact')}
+              className="border-2 border-cyan-600 hover:bg-cyan-600 text-cyan-600 hover:text-white py-3 px-8 rounded-full font-semibold transition-all duration-200 hover:shadow-lg"
+            >
+              {heroConfig.buttons.contact}
             </button>
           </div>
         </div>
       </div>
-      
-      <div 
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce"
-        style={{
-          opacity: Math.max(0, 1 - scrollY / 200),
-        }}
-      >
-        <div className="w-8 h-12 rounded-full border-2 border-white flex items-start justify-center p-1">
-          <div className="w-1 h-3 bg-white rounded-full animate-scrollIndicator"></div>
+
+      {/* Right Content - Video Slider */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-12">
+        <div className="relative w-full max-w-lg">
+          {/* Video Container */}
+          <div className="relative w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl bg-black">
+            {/* Video with Fade Effect */}
+            <div className={`relative w-full h-full transition-opacity duration-300 ${fadeClass || 'opacity-100'}`}>
+              <video
+                ref={videoRef}
+                key={currentSlideData.id}
+                className="w-full h-full object-cover"
+                poster={currentSlideData.poster}
+                playsInline
+                loop
+                muted
+                autoPlay
+              >
+                <source src={currentSlideData.videoUrl} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              
+              {/* Content Overlay */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                <div className="inline-block bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium mb-3">
+                  {heroConfig.categories[currentSlideData.category].name}
+                </div>
+                <h3 className="text-xl font-bold mb-2">
+                  {currentSlideData.title}
+                </h3>
+                <p className="text-white/90 text-sm">
+                  {currentSlideData.description}
+                </p>
+              </div>
+            </div>
+
+            {/* Navigation Controls */}
+            <button
+              onClick={() => navigateSlide('prev')}
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 z-10"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            
+            <button
+              onClick={() => navigateSlide('next')}
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 z-10"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Slide Indicators - Outside Container */}
+          <div className="flex justify-center gap-2 mt-6">
+            {heroConfig.videoSlides.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => navigateSlide(idx)}
+                className={`h-2 rounded-full transition-all duration-200 ${
+                  idx === currentSlide 
+                    ? 'bg-cyan-600 w-8' 
+                    : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 w-2'
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* Decorative Elements */}
+          <div className="absolute -top-4 -right-4 w-20 h-20 bg-cyan-100 dark:bg-cyan-900/30 rounded-full -z-10" />
+          <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-pink-100 dark:bg-pink-900/30 rounded-full -z-10" />
         </div>
       </div>
-    </div>
-  );
-};
+    </section>
+  )
+}
 
-export default HeroSection;
+export default HeroSection

@@ -385,25 +385,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Scroll indicator for hero section */}
-      <motion.div
-        className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-40"
-        initial={{ opacity: 0 }}
-        animate={{
-          opacity: activeSection === "hero" ? 1 : 0,
-          y: activeSection === "hero" ? [0, 10, 0] : 0,
-        }}
-        transition={{
-          opacity: { duration: 0.3 },
-          y: { duration: 1.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" },
-        }}
-      >
-        <div className="flex flex-col items-center">
-          <span className="text-white text-sm mb-2">Scroll Down</span>
-          <ChevronDown className="w-6 h-6 text-white animate-bounce" />
-        </div>
-      </motion.div>
-
       {/* Hero Section */}
       <div id="hero-section" ref={heroRef} className="relative">
         <div className="min-h-screen relative">
@@ -420,29 +401,6 @@ export default function Home() {
           </div>
           <div className="relative z-10">
             <MemoizedHeroSection />
-          </div>
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent py-8 z-10">
-            <div className="container mx-auto px-4">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                {[
-                  { value: "50K+", label: "Happy Customers" },
-                  { value: "3", label: "Premium Services" },
-                  { value: "24/7", label: "Customer Support" },
-                  { value: "100%", label: "Satisfaction Guarantee" },
-                ].map((stat, i) => (
-                  <motion.div
-                    key={i}
-                    className="text-white"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1 + i * 0.1 }}
-                  >
-                    <div className="text-2xl md:text-3xl font-bold mb-1">{stat.value}</div>
-                    <div className="text-sm text-gray-300">{stat.label}</div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       </div>
