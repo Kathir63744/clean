@@ -1,163 +1,227 @@
 "use client"
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { ArrowLeft, Clock, MapPin, Star, Check, Zap, Shield, Bike } from "lucide-react"
+import { motion, AnimatePresence, Variants } from "framer-motion"
+import { ArrowLeft, Clock, MapPin, Star, Check, Zap, Shield, Car, Luggage, Wifi, UserCheck, Phone, CreditCard } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import NavBar from "../clean/components/NavBar"
 import ThemedBannerSlider from "../clean/components/ThemeBannerSlider"
-import BikeServiceTab from "../clean/components/BikeServiceTab"
+import TaxiServiceTab from "../clean/components/BikeServiceTab"
 
-const BikeTaxi = () => {
-  const [activeTab, setActiveTab] = useState("city")
+const TaxiService = () => {
+  const [activeTab, setActiveTab] = useState("premium")
   const [isLoaded, setIsLoaded] = useState(false)
+  const [activeFeature, setActiveFeature] = useState(0)
 
   useEffect(() => {
     setIsLoaded(true)
+    const interval = setInterval(() => {
+      setActiveFeature(prev => (prev + 1) % 3)
+    }, 3000)
+    return () => clearInterval(interval)
   }, [])
 
-  const bikeServices = {
-    city: {
-      title: "City Rides",
-      description: "Fast and efficient bike taxi service for navigating through city traffic.",
+  const taxiServices = {
+    premium: {
+      title: "Premium Taxi Service",
+      description: "Luxury rides with executive vehicles and professional chauffeurs for business or special occasions.",
       features: [
-        { text: "Quick pickups within 5 minutes", icon: Zap },
-        { text: "Affordable city fares", icon: "₹" },
-        { text: "Experienced riders", icon: Bike },
-        { text: "Real-time tracking", icon: MapPin },
+        { text: "Mercedes E-Class & BMW 5 Series", icon: Car },
+        { text: "Complimentary WiFi & Water", icon: Wifi },
+        { text: "Meet & Greet Service", icon: UserCheck },
+        { text: "Flight Tracking", icon: Clock },
+        { text: "Child Seats Available", icon: Shield },
+        { text: "Multiple Payment Options", icon: CreditCard }
       ],
       images: [
-        "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-        "https://images.unsplash.com/photo-1593764592116-bfb2a97c642a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80",
+        "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7",
+        "https://images.unsplash.com/photo-1555212697-194d092e3b8f"
       ],
       stats: [
-        { value: "2M+", label: "Rides Completed" },
-        { value: "98%", label: "On Time" },
-        { value: "4.9", label: "Rating" },
+        { value: "4.9★", label: "Customer Rating" },
+        { value: "99.7%", label: "On Time" },
+        { value: "2000+", label: "Premium Vehicles" }
       ],
+      highlights: [
+        "Executive class comfort",
+        "24/7 availability",
+        "Corporate accounts"
+      ]
     },
-    express: {
-      title: "Express Delivery",
-      description: "Rapid delivery service using our bike taxi network for packages and documents.",
+    airport: {
+      title: "Airport Transfers",
+      description: "Hassle-free airport transportation with fixed pricing and flight monitoring.",
       features: [
-        { text: "Same-hour delivery", icon: Clock },
-        { text: "Package tracking", icon: MapPin },
-        { text: "Secure handling", icon: Shield },
-        { text: "Insurance options", icon: Check },
+        { text: "Flight Delay Protection", icon: Clock },
+        { text: "60 Min Free Waiting", icon: Check },
+        { text: "Extra Luggage Space", icon: Luggage },
+        { text: "Meet at Arrivals", icon: MapPin },
+        { text: "Flat Rate Pricing", icon: "₹" },
+        { text: "24/7 Customer Support", icon: Phone }
       ],
-      images: ["https://images.unsplash.com/photo-1607083206968-13611e3d76db?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1415&q=80"],
+      images: [
+        "https://images.unsplash.com/photo-1436491865332-7a61a109cc05",
+        "https://images.unsplash.com/photo-1470847355775-e0fe3c35f8a4"
+      ],
       stats: [
-        { value: "500K+", label: "Deliveries" },
-        { value: "99%", label: "Success Rate" },
-        { value: "30min", label: "Avg. Time" },
+        { value: "1.2M+", label: "Transfers" },
+        { value: "45min", label: "Avg. Wait Time" },
+        { value: "4.8★", label: "Rating" }
       ],
+      highlights: [
+        "Pre-book your transfer",
+        "Flight tracking included",
+        "Meet & greet service"
+      ]
     },
+    city: {
+      title: "City Taxi",
+      description: "Affordable and reliable point-to-point transportation within the city.",
+      features: [
+        { text: "5 Min Pickup Guarantee", icon: Zap },
+        { text: "Live Tracking", icon: MapPin },
+        { text: "Cashless Payments", icon: CreditCard },
+        { text: "Women Drivers Available", icon: UserCheck },
+        { text: "AC Vehicles", icon: Car },
+        { text: "24/7 Service", icon: Clock }
+      ],
+      images: [
+        "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d",
+        "https://images.unsplash.com/photo-1502877338535-766e1452684a"
+      ],
+      stats: [
+        { value: "10M+", label: "Rides" },
+        { value: "4.7★", label: "Rating" },
+        { value: "98%", label: "On Time" }
+      ],
+      highlights: [
+        "Instant bookings",
+        "Multiple vehicle options",
+        "Share ride option"
+      ]
+    }
   }
 
   const bannerSlides = [
     {
-      image: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-      title: "Fast & Reliable Bike Taxi",
-      subtitle: "Beat the traffic with our quick services",
+      image: "https://images.unsplash.com/photo-1502877338535-766e1452684a",
+      title: "Premium Taxi Services",
+      subtitle: "Travel in comfort with our professional drivers",
       cta: "Book Now",
+      overlay: "bg-teal-900/60"
     },
+    {
+      image: "https://images.unsplash.com/photo-1502877338535-766e1452684a",
+      title: "Airport Transfer Specialists",
+      subtitle: "Fixed rates with flight tracking",
+      cta: "Pre-book Now",
+      overlay: "bg-emerald-900/60"
+    }
   ]
 
-  const activeService = bikeServices[activeTab as keyof typeof bikeServices]
   const tabs = [
-    { key: "city", label: "City Rides", icon: MapPin },
-    { key: "express", label: "Express Delivery", icon: Clock },
+    { key: "premium", label: "Premium", icon: Star },
+    { key: "airport", label: "Airport", icon: MapPin },
+    { key: "city", label: "City Taxi", icon: Car }
   ]
 
-  const containerVariants = {
+  const activeService = taxiServices[activeTab as keyof typeof taxiServices]
+
+  // Animation Variants
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
         when: "beforeChildren",
-        staggerChildren: 0.1,
-      },
-    },
+        staggerChildren: 0.2
+      }
+    }
   }
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+  const itemVariants: Variants = {
+    hidden: { y: 30, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { type: "spring", stiffness: 300, damping: 24 },
-    },
+      transition: { 
+        type: "spring" as const,
+        stiffness: 100 
+      }
+    }
   }
 
-  const fadeIn = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.5 } },
+  const featureVariants: Variants = {
+    hidden: { x: -50, opacity: 0 },
+    visible: (i: number) => ({
+      x: 0,
+      opacity: 1,
+      transition: {
+        delay: i * 0.1,
+        type: "spring" as const,
+        stiffness: 100
+      }
+    })
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 to-gray-900">
       <NavBar />
       
-      {/* Hero Banner */}
+      {/* Animated Banner Slider */}
       <div className="pt-16">
         <ThemedBannerSlider slides={bannerSlides} theme="teal" />
       </div>
 
       {/* Main Content */}
       <motion.div
-        className="px-4 py-8 max-w-7xl mx-auto"
+        className="px-4 py-12 max-w-7xl mx-auto"
         variants={containerVariants}
         initial="hidden"
-        animate={isLoaded ? "visible" : "hidden"}
+        animate="visible"
       >
         {/* Back Button */}
         <motion.div variants={itemVariants}>
-          <Link
-            href="/"
-            className="inline-flex items-center text-teal-400 hover:text-teal-300 mb-8 transition-colors group"
-          >
+          <Link href="/" className="group flex items-center text-teal-400 hover:text-teal-300 mb-8 transition-colors w-fit">
             <ArrowLeft className="mr-2 h-5 w-5 group-hover:-translate-x-1 transition-transform" />
             <span>Back to Home</span>
           </Link>
         </motion.div>
 
         {/* Page Header */}
-        <motion.div className="text-center mb-12" variants={itemVariants}>
+        <motion.div className="text-center mb-16" variants={itemVariants}>
           <motion.h1
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-100 mb-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.3 }}
           >
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">
-              Bike Taxi Services
+              Premium Taxi Services
             </span>
           </motion.h1>
           <motion.p
             className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.4 }}
           >
-            Fast, affordable, and reliable transportation powered by cutting-edge technology and professional riders
+            Experience luxury, reliability and convenience with our professional chauffeur services
           </motion.p>
         </motion.div>
 
         {/* Service Tabs */}
         <motion.div
           className="flex flex-wrap justify-center gap-4 mb-16"
-          variants={itemVariants}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
+          variants={containerVariants}
         >
-          {tabs.map(({ key, label, icon }) => (
-            <BikeServiceTab
-              key={key}
-              icon={icon}
-              label={label}
-              isActive={activeTab === key}
-              onClick={() => setActiveTab(key)}
+          {tabs.map((tab) => (
+            <TaxiServiceTab
+              key={tab.key}
+              icon={tab.icon}
+              label={tab.label}
+              isActive={activeTab === tab.key}
+              onClick={() => setActiveTab(tab.key)}
               theme="teal"
             />
           ))}
@@ -167,51 +231,72 @@ const BikeTaxi = () => {
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="mb-20"
+            className="mb-24"
           >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              {/* Service Images */}
-              <div className="relative h-80 md:h-96 rounded-2xl overflow-hidden shadow-2xl">
+              {/* Image Gallery */}
+              <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-2xl">
                 <div className="absolute inset-0 bg-gradient-to-r from-teal-500/10 to-emerald-500/10 z-10" />
                 <Image
                   src={activeService.images[0]}
                   alt={activeService.title}
-                  className="w-full h-full object-cover object-center"
-                  width={800}
-                  height={600}
+                  fill
+                  className="object-cover"
                   priority
                 />
+                {/* Floating Badges */}
+                <div className="absolute bottom-4 left-4 flex gap-2">
+                  {activeService.highlights.map((highlight, i) => (
+                    <motion.span
+                      key={i}
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.2 + i * 0.1 }}
+                      className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-teal-900/80 text-teal-100 backdrop-blur-sm"
+                    >
+                      {highlight}
+                    </motion.span>
+                  ))}
+                </div>
               </div>
 
               {/* Service Content */}
               <div>
                 <motion.h2
                   className="text-3xl md:text-4xl font-bold text-gray-100 mb-4"
-                  variants={fadeIn}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
                 >
                   {activeService.title}
                 </motion.h2>
                 <motion.p
-                  className="text-lg text-gray-300 mb-6 leading-relaxed"
-                  variants={fadeIn}
+                  className="text-lg text-gray-300 mb-8 leading-relaxed"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
                 >
                   {activeService.description}
                 </motion.p>
 
-                {/* Features List */}
-                <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8" variants={containerVariants}>
-                  {activeService.features.map((feature, index) => {
+                {/* Features Grid */}
+                <motion.div
+                  className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
+                  variants={containerVariants}
+                >
+                  {activeService.features.map((feature, i) => {
                     const Icon = feature.icon
                     return (
                       <motion.div
-                        key={index}
-                        className="flex items-start gap-3 bg-gray-800/50 p-4 rounded-lg backdrop-blur-sm border border-gray-700 hover:border-teal-400/30 transition-colors"
-                        variants={itemVariants}
-                        whileHover={{ y: -2 }}
+                        key={i}
+                        custom={i}
+                        variants={featureVariants}
+                        className="flex items-start gap-3 bg-gray-800/50 p-4 rounded-lg backdrop-blur-sm border border-gray-700 hover:border-teal-400/30 transition-all"
+                        whileHover={{ y: -3 }}
                       >
                         {typeof Icon === 'string' ? (
                           <span className="text-teal-400 font-bold text-lg">{Icon}</span>
@@ -226,15 +311,17 @@ const BikeTaxi = () => {
 
                 {/* Stats */}
                 <motion.div
-                  className="flex flex-wrap gap-6 justify-start"
+                  className="flex flex-wrap gap-6"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.6 }}
                 >
-                  {activeService.stats.map((stat, index) => (
-                    <div key={index} className="text-center">
+                  {activeService.stats.map((stat, i) => (
+                    <div key={i} className="text-center">
                       <div className="text-3xl font-bold text-teal-400">{stat.value}</div>
-                      <div className="text-sm text-gray-400 uppercase tracking-wider">{stat.label}</div>
+                      <div className="text-sm text-gray-400 uppercase tracking-wider mt-1">
+                        {stat.label}
+                      </div>
                     </div>
                   ))}
                 </motion.div>
@@ -243,7 +330,7 @@ const BikeTaxi = () => {
           </motion.div>
         </AnimatePresence>
 
-        {/* Testimonials Section */}
+        {/* Testimonials */}
         <motion.section
           className="py-16"
           initial={{ opacity: 0 }}
@@ -259,7 +346,7 @@ const BikeTaxi = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              Trusted by Thousands of Riders
+              Trusted by Thousands
             </motion.h2>
             <motion.p
               className="text-lg text-gray-400 max-w-2xl mx-auto"
@@ -268,66 +355,64 @@ const BikeTaxi = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
             >
-              Don&apos;t just take our word for it. Here&apos;s what our community has to say.
+              What our customers say about their experiences
             </motion.p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                name: "Rajesh Kumar",
-                service: "Daily Commuter",
-                quote: "Saves me at least 30 minutes each way compared to cabs. The riders are professional and the app is super easy to use.",
-                avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80",
+                name: "Rahul Sharma",
+                role: "Business Traveler",
+                quote: "The premium service is exceptional. Always on time with clean cars and professional drivers.",
                 rating: 5,
+                avatar: "/avatars/business-man.jpg"
               },
               {
-                name: "Priya Sharma",
-                service: "Express Delivery User",
-                quote: "I use their express service weekly for document deliveries. Lightning fast and reliable - never had a single issue!",
-                avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                name: "Priya Patel",
+                role: "Frequent Flyer",
+                quote: "Airport transfers are seamless with their flight tracking. Never missed a pickup!",
                 rating: 5,
+                avatar: "/avatars/woman-traveler.jpg"
               },
               {
-                name: "Amit Singh",
-                service: "Weekend Rider",
-                quote: "Perfect for avoiding traffic jams on weekends. Affordable prices and the riders know all the shortcuts in the city.",
-                avatar: "https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80",
+                name: "Arjun Kapoor",
+                role: "Daily Commuter",
+                quote: "Affordable and reliable. The 5-minute pickup guarantee actually works!",
                 rating: 4,
-              },
-            ].map((testimonial, index) => (
+                avatar: "/avatars/young-man.jpg"
+              }
+            ].map((testimonial, i) => (
               <motion.div
-                key={index}
+                key={i}
                 className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-teal-400/20 hover:border-teal-400/50 transition-all"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ delay: 0.1 * index }}
-                whileHover={{ y: -8, boxShadow: "0 20px 25px -5px rgba(20, 184, 166, 0.2)" }}
+                transition={{ delay: 0.1 * i }}
+                whileHover={{ y: -5 }}
               >
                 <div className="flex items-start mb-4 gap-4">
-                  <div className="w-14 h-14 rounded-full overflow-hidden shrink-0">
+                  <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 bg-gray-700">
                     <Image
                       src={testimonial.avatar}
                       alt={testimonial.name}
                       width={56}
                       height={56}
                       className="w-full h-full object-cover"
-                      loading="lazy"
-                      
                     />
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-100">{testimonial.name}</h3>
-                    <p className="text-teal-400 text-sm">{testimonial.service}</p>
+                    <p className="text-teal-400 text-sm">{testimonial.role}</p>
                   </div>
                 </div>
-                <p className="text-gray-300 mb-4">&quot;{testimonial.quote}&quot;</p>
+                <p className="text-gray-300 mb-4 italic">"{testimonial.quote}"</p>
                 <div className="flex gap-1">
-                  {Array.from({ length: 5 }).map((_, i) => (
+                  {Array(5).fill(0).map((_, j) => (
                     <Star
-                      key={i}
-                      className={`w-5 h-5 ${i < testimonial.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-600"}`}
+                      key={j}
+                      className={`w-5 h-5 ${j < testimonial.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-600"}`}
                     />
                   ))}
                 </div>
@@ -352,7 +437,7 @@ const BikeTaxi = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              Ready to Ride With Us?
+              Ready for Your Next Ride?
             </motion.h2>
             <motion.p
               className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto"
@@ -361,7 +446,7 @@ const BikeTaxi = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
             >
-              Download our app now and get your first ride at 50% off!
+              Download our app now and get 20% off your first premium ride!
             </motion.p>
             <motion.div
               className="flex flex-wrap justify-center gap-4"
@@ -370,11 +455,13 @@ const BikeTaxi = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
             >
-              <button className="bg-teal-500 hover:bg-teal-600 text-white font-medium px-8 py-3 rounded-lg shadow-lg transition-all transform hover:scale-105">
-                Download App
+              <button className="bg-teal-600 hover:bg-teal-700 text-white font-medium px-8 py-3 rounded-lg shadow-lg transition-all transform hover:scale-105 flex items-center gap-2">
+                <Phone className="w-5 h-5" />
+                <span>Download App</span>
               </button>
-              <button className="bg-transparent border-2 border-teal-400 text-teal-400 hover:bg-teal-400/10 font-medium px-8 py-3 rounded-lg transition-all">
-                Book Now
+              <button className="bg-transparent border-2 border-teal-400 text-teal-400 hover:bg-teal-400/10 font-medium px-8 py-3 rounded-lg transition-all flex items-center gap-2">
+                <Car className="w-5 h-5" />
+                <span>Book Now</span>
               </button>
             </motion.div>
           </div>
@@ -384,4 +471,4 @@ const BikeTaxi = () => {
   )
 }
 
-export default BikeTaxi
+export default TaxiService

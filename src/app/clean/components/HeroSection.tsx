@@ -76,15 +76,15 @@ const heroConfig: HeroConfig = {
   categories: {
     bike: {
       name: "Bike Services",
-      buttonColor: "bg-blue-500 hover:bg-blue-600"
+      buttonColor: "bg-teal-500 hover:bg-blue-600"
     },
     cleaning: {
       name: "Cleaning",
-      buttonColor: "bg-green-500 hover:bg-green-600"
+      buttonColor: "bg-amber-500 hover:bg-green-600"
     },
     grooming: {
       name: "Grooming",
-      buttonColor: "bg-pink-500 hover:bg-pink-600"
+      buttonColor: "bg-blue-500 hover:bg-pink-600"
     },
   },
   services: [
@@ -154,7 +154,7 @@ const heroConfig: HeroConfig = {
       id: 3,
       title: 'Bike Riding Experiences',
       description: 'Adventure awaits on two wheels',
-      videoUrl: '/PixVerse_V4.5_Image_Text_360P_create_a_concept.mp4',
+      videoUrl: '/ride.mp4',
       poster: '/bike-poster.jpg',
       category: 'bike'
     }
@@ -244,7 +244,7 @@ const HeroSection = () => {
   const currentSlideData = heroConfig.videoSlides[currentSlide]
 
   return (
-    <section className="w-full min-h-screen bg-white dark:bg-gray-900 flex flex-col lg:flex-row">
+    <section className="w-full mt-5 min-h-screen bg-white dark:bg-gray-900 flex flex-col lg:flex-row">
       {/* Left Content - Services */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center px-6 md:px-12 lg:px-16 py-12 lg:py-20">
         <div className="max-w-lg">

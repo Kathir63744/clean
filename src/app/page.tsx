@@ -265,6 +265,14 @@ export default function Home() {
       icon: <Shield className="h-10 w-10 text-indigo-500" />,
     },
   ]
+  const scrollSections = [
+  { id: 'hero', name: 'Home', color: 'from-indigo-600 to-cyan-400' },
+  { id: 'car', name: 'Cars', color: 'from-teal-600 to-cyan-600' },
+  { id: 'cleaning', name: 'Cleaning', color: 'from-amber-600 to-yellow-500' },
+  { id: 'grooming', name: 'Grooming', color: 'from-blue-600 to-indigo-600' },
+  { id: 'testimonials', name: 'Reviews', color: 'from-purple-600 to-pink-500' },
+  { id: 'footer', name: 'Contact', color: 'from-gray-600 to-gray-400' },
+];
 
   const testimonials = [
     {
@@ -327,63 +335,48 @@ export default function Home() {
   
 
       {/* Section indicator */}
-      <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-50 hidden md:block">
-        <div className="flex flex-col items-center space-y-4">
-          {["hero", "car", "cleaning", "grooming", "testimonials", "footer"].map((section) => (
-            <motion.div
-              key={section}
-              className="relative"
-              initial={{ opacity: 0.5 }}
-              animate={{
-                opacity: activeSection === section ? 1 : 0.6,
-                scale: activeSection === section ? 1.3 : 1,
-              }}
-              whileHover={{
-                opacity: 0.9,
-                scale: 1.2,
-                transition: { duration: 0.2 },
-              }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            >
-              <button
-                onClick={() => {
-                  const element = document.getElementById(section + "-section")
-                  if (element) {
-                    element.scrollIntoView({ behavior: "smooth" })
-                  }
-                }}
-                className={`w-3 h-3 rounded-full ${
-                  activeSection === section ? "bg-gradient-to-r from-indigo-600 to-cyan-400" : "bg-gray-500"
-                } transition-all duration-300`}
-                aria-label={`Scroll to ${section} section`}
-              />
-              {activeSection === section && (
-                <motion.span
-                  className="absolute -left-28 top-0 whitespace-nowrap text-sm font-semibold bg-white/80 backdrop-blur-sm px-2 py-1 rounded-md shadow-sm"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{
-                    opacity: 1,
-                    x: 0,
-                    textShadow: "0 0 8px rgba(99, 102, 241, 0.3)",
-                  }}
-                  exit={{ opacity: 0, x: 10 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 500,
-                    damping: 30,
-                    duration: 0.3,
-                  }}
-                  style={{
-                    color: "hsl(243.5, 82.6%, 62.9%)",
-                  }}
-                >
-                  {section.charAt(0).toUpperCase() + section.slice(1)}
-                </motion.span>
-              )}
-            </motion.div>
-          ))}
-        </div>
+<div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-50 hidden md:block">
+  <div className="flex flex-col items-center space-y-6">
+    {["hero", "car", "cleaning", "grooming", "testimonials", "footer"].map((section) => (
+      <div key={section} className="relative group">
+        {/* Static dot (no animation) */}
+       <button
+  onClick={() => {
+    const element = document.getElementById(section + "-section");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+      setActiveSection(section); // ✅ update ONLY on click
+    }
+  }}
+  className={`w-4 h-4 rounded-full transition-all duration-300 border-2
+    ${activeSection === section
+      ? "border-indigo-500 bg-gradient-to-r from-indigo-600 to-cyan-400 shadow-md"
+      : "border-gray-400 bg-gray-500"
+    }`}
+  aria-label={`Scroll to ${section} section`}
+/>
+
+
+        {/* Animated tab (tooltip) */}
+        {activeSection === section && (
+          <motion.div
+            className="absolute right-11 top-1/2 transform -translate-y-1/2 px-4 py-1.5 rounded-xl uppercase
+              bg-gradient-to-r from-indigo-600 to-cyan-400 text-white text-[13px] font-semibold
+              shadow-[0_0_10px_rgba(99,102,241,0.4)] border border-white/20 backdrop-blur-md ring-1 ring-indigo-300/40"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 10 }}
+            transition={{ type: "spring", stiffness: 300, damping: 24 }}
+          >
+            {section.charAt(0).toUpperCase() + section.slice(1)}
+          </motion.div>
+        )}
       </div>
+    ))}
+  </div>
+</div>
+
+
 
       {/* Hero Section */}
       <div id="hero-section" ref={heroRef} className="relative">
@@ -631,7 +624,6 @@ export default function Home() {
           </motion.div>
         </div>
 
-        <SectionTransition fromColor="#0f766e" toColor="#7c2d12" pattern="wave" />
       </div>
 
       {/* Service Intro - Cleaning Services */}
@@ -862,7 +854,7 @@ export default function Home() {
           </motion.div>
         </div>
 
-        <SectionTransition fromColor="#7c2d12" toColor="#1e3a8a" pattern="wave" />
+        
       </div>
 
     
@@ -1091,8 +1083,6 @@ export default function Home() {
             </div>
           </motion.div>
         </div>
-
-        <SectionTransition fromColor="#1e3a8a" toColor="#f3f4f6" pattern="wave" />
       </div>
 
       {/* Testimonials Section */}

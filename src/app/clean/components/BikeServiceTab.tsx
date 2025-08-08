@@ -1,55 +1,69 @@
 "use client"
-
 import { FC } from "react"
 import { cn } from "@/lib/utils"
+import { motion } from "framer-motion"
 
-interface BikeServiceTabProps {
+interface TaxiServiceTabProps {
   icon: React.ElementType
   label: string
   isActive: boolean
   onClick: () => void
-  theme?: "teal" | "indigo" | "amber" // Extendable for future themes
+  theme?: "blue" | "teal" | "amber" | "indigo"
 }
 
-const themeStyles: Record<
-  NonNullable<BikeServiceTabProps["theme"]>,
-  { active: string; inactive: string }
-> = {
+const themeStyles = {
+  blue: {
+    active: "bg-blue-600 text-white shadow-lg shadow-blue-500/20",
+    inactive: "bg-transparent text-blue-400 border-blue-400 hover:bg-blue-500/10",
+    activeIcon: "text-white",
+    inactiveIcon: "text-blue-400"
+  },
   teal: {
-    active: "bg-teal-600 text-white border-teal-500",
+    active: "bg-teal-600 text-white shadow-lg shadow-teal-500/20",
     inactive: "bg-transparent text-teal-400 border-teal-400 hover:bg-teal-500/10",
+    activeIcon: "text-white",
+    inactiveIcon: "text-teal-400"
   },
   indigo: {
-    active: "bg-indigo-600 text-white border-indigo-500",
+    active: "bg-indigo-600 text-white shadow-lg shadow-indigo-500/20",
     inactive: "bg-transparent text-indigo-400 border-indigo-400 hover:bg-indigo-500/10",
+    activeIcon: "text-white",
+    inactiveIcon: "text-indigo-400"
   },
   amber: {
-    active: "bg-amber-500 text-black border-amber-500",
+    active: "bg-amber-500 text-gray-900 shadow-lg shadow-amber-500/20",
     inactive: "bg-transparent text-amber-500 border-amber-500 hover:bg-amber-500/10",
-  },
+    activeIcon: "text-gray-900",
+    inactiveIcon: "text-amber-500"
+  }
 }
 
-const BikeServiceTab: FC<BikeServiceTabProps> = ({
+const TaxiServiceTab: FC<TaxiServiceTabProps> = ({
   icon: Icon,
   label,
   isActive,
   onClick,
-  theme = "teal",
+  theme = "blue"
 }) => {
   const styles = themeStyles[theme]
 
   return (
-    <button
+    <motion.button
       onClick={onClick}
       className={cn(
-        "flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors duration-200",
+        "flex items-center gap-2 px-6 py-3 rounded-full border-2 transition-all duration-200",
         isActive ? styles.active : styles.inactive
       )}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
     >
-      <Icon className="w-5 h-5" />
+      <Icon className={cn(
+        "w-5 h-5 transition-colors",
+        isActive ? styles.activeIcon : styles.inactiveIcon
+      )} />
       <span className="font-medium">{label}</span>
-    </button>
+    </motion.button>
   )
 }
 
-export default BikeServiceTab
+export default TaxiServiceTab
