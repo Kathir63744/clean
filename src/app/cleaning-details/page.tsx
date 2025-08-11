@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
+import { motion, Variants, Transition } from "framer-motion"
 import { ArrowLeft, Droplet, Home, Hospital, Car, Building2, Sparkles, Shield, Leaf, CalendarCheck } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -184,7 +184,7 @@ const tabs = [
   { key: "apartment", label: "Apartment", icon: Building2 },
 ]
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -195,12 +195,18 @@ const containerVariants = {
   },
 }
 
-const itemVariants = {
+const springTransition: Transition = {
+  type: "spring",
+  stiffness: 300,
+  damping: 24,
+}
+
+const itemVariants: Variants = {
   hidden: { y: 20, opacity: 0 },
   visible: {
     y: 0,
     opacity: 1,
-    transition: { type: "spring", stiffness: 300, damping: 24 },
+    transition: springTransition,
   },
 }
 
