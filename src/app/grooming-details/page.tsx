@@ -1,13 +1,33 @@
 "use client"
+
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, Variants, Transition } from "framer-motion"
 import { ArrowLeft, Scissors, Palette, Sparkles, Droplet } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import NavBar from "../clean/components/NavBar"
 import BannerSlider from "../clean/components/banner-slider/BannerSlider"
 
-const groomingServices = {
+interface GroomingService {
+  title: string
+  description: string
+  features: string[]
+  images: string[]
+}
+
+interface BannerSlide {
+  image: string
+  title: string
+  subtitle: string
+}
+
+interface Tab {
+  key: string
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+}
+
+const groomingServices: Record<string, GroomingService> = {
   haircut: {
     title: "Professional Haircuts",
     description: "Expert haircuts tailored to your style preferences, face shape, and hair type.",
@@ -112,7 +132,7 @@ const groomingServices = {
   },
 }
 
-const bannerSlides = [
+const bannerSlides: BannerSlide[] = [
   {
     image: "https://images.pexels.com/photos/3993256/pexels-photo-3993256.jpeg",
     title: "Expert Grooming Services",
@@ -130,13 +150,39 @@ const bannerSlides = [
   }
 ]
 
-const tabs = [
+const tabs: Tab[] = [
   { key: "haircut", label: "Haircut", icon: Scissors },
   { key: "nailPolishing", label: "Nail Polishing", icon: Sparkles },
   { key: "hairColoring", label: "Hair Coloring", icon: Palette },
   { key: "manicure", label: "Manicure", icon: Droplet },
   { key: "pedicure", label: "Pedicure", icon: Droplet },
 ]
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      when: "beforeChildren",
+      staggerChildren: 0.1
+    }
+  }
+}
+
+const springTransition: Transition = {
+  type: "spring",
+  stiffness: 300,
+  damping: 24
+}
+
+const itemVariants: Variants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: springTransition
+  }
+}
 
 export default function GroomingDetails() {
   const [activeTab, setActiveTab] = useState("haircut")
@@ -146,27 +192,7 @@ export default function GroomingDetails() {
     setIsLoaded(true)
   }, [])
 
-  const activeService = groomingServices[activeTab as keyof typeof groomingServices]
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        when: "beforeChildren",
-        staggerChildren: 0.1
-      }
-    }
-  }
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { type: "spring", stiffness: 300, damping: 24 }
-    }
-  }
+  const activeService = groomingServices[activeTab]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-blue-950 to-indigo-900 overflow-x-hidden text-white">
