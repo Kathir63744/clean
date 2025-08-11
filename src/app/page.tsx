@@ -625,10 +625,6 @@ export default function Home() {
         </div>
 
       </div>
-
-      {/* Service Intro - Cleaning Services */}
-    
-
       {/* Cleaning Services Section */}
       <div
         id="cleaning-section"
@@ -852,13 +848,8 @@ export default function Home() {
               </motion.div>
             </div>
           </motion.div>
-        </div>
-
-        
+        </div>        
       </div>
-
-    
-
       {/* Grooming Services Section */}
       <div
         id="grooming-section"
@@ -948,7 +939,6 @@ export default function Home() {
                     preferences.
                   </motion.p>
                 </div>
-
                 {/* Enhanced 3D View Container with Image Placeholder */}
                 <motion.div
                   className="flex-1 min-h-[300px] rounded-xl overflow-hidden mb-6 border border-blue-300/20 shadow-inner shadow-blue-900/30 relative"
@@ -956,10 +946,8 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
                 >
-                  <GroomingThreeDView />
-            
+                   <GroomingThreeDView />            
                 </motion.div>
-
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -977,7 +965,6 @@ export default function Home() {
                   </Link>
                 </motion.div>
               </motion.div>
-
               {/* Middle Column - Photo Gallery */}
               <motion.div
                 className="h-full flex flex-col relative"
@@ -991,7 +978,6 @@ export default function Home() {
                   <GroomingPhotoGallery />
                 </div>
               </motion.div>
-
               {/* Right Column - Features */}
               <motion.div
                 className="p-8 md:p-10 bg-indigo-900/30 backdrop-blur-sm"
@@ -1008,7 +994,6 @@ export default function Home() {
                 >
                   Why Choose Us
                 </motion.h3>
-
                 <div className="space-y-6">
                   {[
                     {
