@@ -89,15 +89,15 @@ const heroConfig: HeroConfig = {
   },
   services: [
     {
-      title: 'Book a Bike Ride',
-      iconSrc: '/bike.png',
+      title: 'Book a Taxi Ride',
+      iconSrc: '/car2.png',
       description: 'Fast and affordable rides for daily travel',
       category: 'bike'
     },
     {
-      title: 'Become a Rider',
-      iconSrc: '/raider.png',
-      description: 'Join as a captain and start earning today',
+      title: 'Become a Star Customer',
+      iconSrc: '/car1.png',
+      description: 'Join as a customer and start earning today',
       category: 'bike'
     },
     {
@@ -152,8 +152,8 @@ const heroConfig: HeroConfig = {
     },
     {
       id: 3,
-      title: 'Bike Riding Experiences',
-      description: 'Adventure awaits on two wheels',
+      title: 'Best Experiences',
+      description: 'Adventure awaits on four wheels',
       videoUrl: '/ride.mp4',
       poster: '/bike-poster.jpg',
       category: 'bike'
