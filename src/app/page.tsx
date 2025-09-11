@@ -42,12 +42,12 @@ const MemoizedHeroSection = memo(HeroSection)
 
 // Service Intro Component
 const ServiceIntro = ({ title, subtitle, gradient }: { title: string; subtitle: string; gradient: string }) => (
-  <div className="py-16 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
+  <div className="py-16 bg-gradient-to-br from-white via-gray-50 to-gray-100 relative overflow-hidden border-b border-gray-200">
     <div className="absolute inset-0">
       {Array.from({ length: 20 }).map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-2 h-2 bg-white/10 rounded-full"
+          className="absolute w-2 h-2 bg-gray-300/50 rounded-full"
           style={{
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
@@ -75,7 +75,7 @@ const ServiceIntro = ({ title, subtitle, gradient }: { title: string; subtitle: 
         {title}
       </motion.h2>
       <motion.p
-        className="text-xl text-gray-300 max-w-2xl mx-auto"
+        className="text-xl text-gray-600 max-w-2xl mx-auto"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: false, amount: 0.5 }}
@@ -117,24 +117,6 @@ export default function Home() {
     }
     setLastScrollY(currentScrollY)
 
-    const sections = [
-      { ref: heroRef, id: "hero" },
-      { ref: carRef, id: "car" },
-      { ref: cleaningRef, id: "cleaning" },
-      { ref: groomingRef, id: "grooming" },
-      { ref: testimonialsRef, id: "testimonials" },
-      { ref: footerRef, id: "footer" },
-    ]
-
-    for (const section of sections) {
-      if (section.ref.current) {
-        const rect = section.ref.current.getBoundingClientRect()
-        if (rect.top <= window.innerHeight * 0.3 && rect.bottom >= window.innerHeight * 0.3) {
-          setActiveSection(section.id)
-          break
-        }
-      }
-    }
   }, [lastScrollY])
 
   useEffect(() => {
@@ -168,7 +150,7 @@ export default function Home() {
       description: "Reliable pickup and drop-off services",
       image: "https://images.pexels.com/photos/358319/pexels-photo-358319.jpeg",
       path: "/services/airport-transfer",
-      icon: <Navigation className="h-10 w-10 text-teal-500" />,
+      icon: <Navigation className="h-10 w-10 text-blue-500" />,
     },
     {
       id: 2,
@@ -176,7 +158,7 @@ export default function Home() {
       description: "Explore the city with our guided tours",
       image: "https://images.pexels.com/photos/1545743/pexels-photo-1545743.jpeg",
       path: "/services/city-tours",
-      icon: <MapPin className="h-10 w-10 text-teal-500" />,
+      icon: <MapPin className="h-10 w-10 text-blue-500" />,
     },
     {
       id: 3,
@@ -184,7 +166,7 @@ export default function Home() {
       description: "Professional transportation for business",
       image: "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg",
       path: "/services/corporate-travel",
-      icon: <Users className="h-10 w-10 text-teal-500" />,
+      icon: <Users className="h-10 w-10 text-blue-500" />,
     },
     {
       id: 4,
@@ -192,7 +174,7 @@ export default function Home() {
       description: "Premium vehicles for special occasions",
       image: "https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg",
       path: "/services/luxury-rides",
-      icon: <Award className="h-10 w-10 text-teal-500" />,
+      icon: <Award className="h-10 w-10 text-blue-500" />,
     },
   ]
 
@@ -265,14 +247,6 @@ export default function Home() {
       icon: <Shield className="h-10 w-10 text-indigo-500" />,
     },
   ]
-  const scrollSections = [
-  { id: 'hero', name: 'Home', color: 'from-indigo-600 to-cyan-400' },
-  { id: 'car', name: 'Cars', color: 'from-teal-600 to-cyan-600' },
-  { id: 'cleaning', name: 'Cleaning', color: 'from-amber-600 to-yellow-500' },
-  { id: 'grooming', name: 'Grooming', color: 'from-blue-600 to-indigo-600' },
-  { id: 'testimonials', name: 'Reviews', color: 'from-purple-600 to-pink-500' },
-  { id: 'footer', name: 'Contact', color: 'from-gray-600 to-gray-400' },
-];
 
   const testimonials = [
     {
@@ -298,85 +272,174 @@ export default function Home() {
     },
   ]
 
-  if (isLoading) {
-    return (
-      <div className="fixed inset-0 bg-gradient-to-br from-indigo-950 to-gray-900 flex items-center justify-center z-50">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="text-center"
-        >
+if (isLoading) {
+  return (
+    <div className="fixed inset-0 bg-gradient-to-br from-indigo-50 via-cyan-50 to-gray-100 flex items-center justify-center z-50">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-center max-w-md px-6"
+      >
+        {/* Multi-layered spinner */}
+        <div className="relative w-24 h-24 mx-auto mb-6">
+          {/* Outer ring with gradient */}
           <motion.div
-            animate={{
-              rotate: 360,
-              transition: { duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "linear" },
-            }}
-            className="inline-block mb-4"
-          >
-            <div className="w-16 h-16 rounded-full border-4 border-t-indigo-500 border-r-amber-500 border-b-cyan-500 border-l-lime-500 border-t-4 animate-spin"></div>
-          </motion.div>
-          <motion.h2
-            className="text-2xl font-bold text-white"
-            animate={{ opacity: [0.5, 1, 0.5] }}
+            className="absolute inset-0 rounded-full border-4 border-indigo-100"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+          />
+          
+          {/* Middle spinning ring */}
+          <motion.div
+            className="absolute inset-2 rounded-full border-4 border-t-indigo-400 border-r-amber-400 border-b-cyan-400 border-l-lime-400"
+            animate={{ rotate: -360 }}
+            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+          />
+          
+          {/* Inner pulsing circle */}
+          <motion.div
+            className="absolute inset-4 rounded-full bg-gradient-to-r from-indigo-300 to-cyan-300 flex items-center justify-center"
+            animate={{ scale: [1, 1.1, 1] }}
             transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
           >
-            Get Better Experience in Car Services, Cleaning & Grooming
-          </motion.h2>
-        </motion.div>
-      </div>
-    )
-  }
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+              className="text-white text-lg"
+            >
+              ✦
+            </motion.div>
+          </motion.div>
+        </div>
 
+        {/* Catchy content with staggered animation */}
+        <div className="space-y-3">
+          <motion.h2
+            className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-cyan-600 bg-clip-text text-transparent"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            Explore Various User-Friendly Services With Us
+          </motion.h2>
+          
+          <motion.p
+            className="text-sm text-gray-600 italic"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+          >
+            More than a Service, A Complete Experience
+          </motion.p>
+          
+          <motion.div
+            className="flex flex-wrap justify-center gap-2 mt-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            {["One-Click Booking", "Expert Technicians", "Eco-Friendly", "Time-Saving"].map((item, index) => (
+              <motion.span
+                key={index}
+                className="px-3 py-1.5 bg-white/80 rounded-full text-xs font-medium text-indigo-700 shadow-sm border border-indigo-100"
+                whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,1)" }}
+                animate={{ y: [0, -4, 0] }}
+                transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: index * 0.5 }}
+              >
+                ✓ {item}
+              </motion.span>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Fun progress indicator */}
+        <motion.div 
+          className="mt-6 mx-auto w-48 h-2 bg-gray-200 rounded-full overflow-hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+        >
+          <motion.div
+            className="h-full bg-gradient-to-r from-indigo-400 to-cyan-400 rounded-full relative"
+            initial={{ width: "0%" }}
+            animate={{ width: "100%" }}
+            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse" }}
+          >
+            <motion.div
+              className="absolute right-0 top-0 w-2 h-2 bg-white rounded-full"
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY }}
+            />
+          </motion.div>
+        </motion.div>
+        
+        {/* Friendly tip */}
+        <motion.p
+          className="text-xs text-gray-500 mt-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 0.5 }}
+        >
+          Pro tip: Book multiple services together!!!
+        </motion.p>
+      </motion.div>
+    </div>
+  )
+}
   return (
-    <div className="min-h-screen bg-gray-50 overflow-hidden">
+    <div className="min-h-screen mt-5 bg-white overflow-hidden">
       {/* Fixed navigation */}
       <MemoizedNavBar />
-  
 
-      {/* Section indicator */}
+{/* Enhanced Section Indicator */}
 <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-50 hidden md:block">
   <div className="flex flex-col items-center space-y-6">
-    {["hero", "car", "cleaning", "grooming", "testimonials", "footer"].map((section) => (
-      <div key={section} className="relative group">
-        {/* Static dot (no animation) */}
-       <button
-  onClick={() => {
-    const element = document.getElementById(section + "-section");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setActiveSection(section); // ✅ update ONLY on click
-    }
-  }}
-  className={`w-4 h-4 rounded-full transition-all duration-300 border-2
-    ${activeSection === section
-      ? "border-indigo-500 bg-gradient-to-r from-indigo-600 to-cyan-400 shadow-md"
-      : "border-gray-400 bg-gray-500"
-    }`}
-  aria-label={`Scroll to ${section} section`}
-/>
+    {[
+      { id: "hero", label: "Welcome" },
+      { id: "car", label: "Taxi" },
+      { id: "cleaning", label: "Clean" },
+      { id: "grooming", label: "Groom" },
+      { id: "testimonials", label: "Reviews" },
+      { id: "footer", label: "Contact" }
+    ].map(({ id, label }) => (
+      <div key={id} className="relative group">
+        <button
+          onClick={() => {
+            const element = document.getElementById(id + "-section")
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth" })
+              setActiveSection(id)
+            }
+          }}
+          className={`w-4 h-4 rounded-full transition-all duration-300 border-2
+            ${activeSection === id
+              ? "border-indigo-500 bg-gradient-to-r from-indigo-500 to-purple-400 shadow-lg"
+              : "border-gray-300 bg-white hover:bg-gray-100 shadow-sm"
+            }`}
+          aria-label={`Scroll to ${label} section`}
+        />
 
 
-        {/* Animated tab (tooltip) */}
-        {activeSection === section && (
+
+        {/* Active indicator (only visible when active) */}
+        {activeSection === id && (
           <motion.div
-            className="absolute right-11 top-1/2 transform -translate-y-1/2 px-4 py-1.5 rounded-xl uppercase
-              bg-gradient-to-r from-indigo-600 to-cyan-400 text-white text-[13px] font-semibold
-              shadow-[0_0_10px_rgba(99,102,241,0.4)] border border-white/20 backdrop-blur-md ring-1 ring-indigo-300/40"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 10 }}
-            transition={{ type: "spring", stiffness: 300, damping: 24 }}
+            className="absolute right-11 top-1/2 transform -translate-y-1/2 px-3 py-1.5 rounded-lg uppercase
+              bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs font-semibold
+              shadow-[0_0_15px_rgba(99,102,241,0.3)] border border-white/20 backdrop-blur-sm"
+            initial={{ opacity: 0, x: 20, scale: 0.8 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 10, scale: 0.8 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
           >
-            {section.charAt(0).toUpperCase() + section.slice(1)}
+            {label}
           </motion.div>
         )}
       </div>
     ))}
   </div>
 </div>
-
-
 
       {/* Hero Section */}
       <div id="hero-section" ref={heroRef} className="relative">
@@ -390,7 +453,7 @@ export default function Home() {
               height={1080}
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-indigo-950/80 to-gray-900/80"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-white/90 to-gray-100/90"></div>
           </div>
           <div className="relative z-10">
             <MemoizedHeroSection />
@@ -402,7 +465,7 @@ export default function Home() {
       <div
         id="car-section"
         ref={carRef}
-        className="relative w-full min-h-screen bg-gradient-to-br from-teal-900 to-cyan-900 overflow-hidden"
+        className="relative w-full min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 overflow-hidden"
       >
         {/* Animated floating elements background */}
         <div className="absolute inset-0 overflow-hidden">
@@ -412,7 +475,7 @@ export default function Home() {
             return (
               <motion.div
                 key={i}
-                className="absolute rounded-full bg-gradient-to-br from-teal-500/10 to-cyan-400/10 backdrop-blur-[1px]"
+                className="absolute rounded-full bg-gradient-to-br from-blue-200/30 to-cyan-200/30 backdrop-blur-[1px]"
                 initial={{
                   x: Math.random() * 100,
                   y: Math.random() * 100,
@@ -439,14 +502,14 @@ export default function Home() {
         {/* Main content container */}
         <div className="relative z-10 container mx-auto px-4 py-12 h-full flex items-center">
           <motion.div
-            className="w-full bg-gradient-to-br from-teal-800/20 via-cyan-900/40 to-teal-600/20 backdrop-blur-lg rounded-3xl shadow-2xl shadow-teal-900/30 border border-teal-300/20 overflow-hidden"
+            className="w-full bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl shadow-blue-100/50 border border-blue-200/50 overflow-hidden"
             initial={{ opacity: 0, scale: 0.98 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: false, amount: 0.3 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             {/* Three-column layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 h-full divide-x divide-teal-300/10">
+            <div className="grid grid-cols-1 lg:grid-cols-3 h-full divide-x divide-blue-100/50">
               {/* Left Column - Content & 3D View */}
               <motion.div
                 className="p-8 md:p-10 flex flex-col h-full"
@@ -462,23 +525,23 @@ export default function Home() {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
                   >
-                    <div className="p-2 rounded-lg bg-teal-500/20 backdrop-blur-sm border border-teal-300/10">
-                      <Car className="h-6 w-6 text-teal-200" />
+                    <div className="p-2 rounded-lg bg-blue-100/50 backdrop-blur-sm border border-blue-200/30">
+                      <Car className="h-6 w-6 text-blue-500" />
                     </div>
-                    <h1 className="ml-3 text-2xl font-bold text-teal-100 bg-gradient-to-r from-teal-100 to-teal-200 bg-clip-text">
+                    <h1 className="ml-3 text-2xl font-bold text-blue-600">
                       EliteCars
                     </h1>
                   </motion.div>
                   <motion.h2
-                    className="text-3xl md:text-4xl lg:text-5xl font-bold text-teal-50 mb-4 leading-tight"
+                    className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 leading-tight"
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
                   >
-                    Premium <span className="text-teal-300">Car</span> Services
+                    Premium <span className="text-blue-500">Car</span> Services
                   </motion.h2>
                   <motion.p
-                    className="text-teal-100/80 text-lg max-w-md"
+                    className="text-gray-600 text-lg max-w-md"
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
@@ -490,14 +553,12 @@ export default function Home() {
 
                 {/* Enhanced 3D View Container with Image Placeholder */}
                 <motion.div
-                  className="flex-1 min-h-[300px] rounded-xl overflow-hidden mb-6 border border-teal-300/20 shadow-inner shadow-teal-900/30 relative"
+                  className="flex-1 min-h-[300px] rounded-xl overflow-hidden mb-6 border border-blue-200/50 shadow-inner shadow-blue-100/30 relative"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
                 >
                   <CarThreeDView />
-                  {/* Image Placeholder Overlay */}
-                
                 </motion.div>
 
                 <motion.div
@@ -507,13 +568,13 @@ export default function Home() {
                 >
                   <Link
                     href="/bike-taxi"
-                    className="group relative w-full md:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-medium shadow-lg hover:shadow-teal-500/40 transition-all duration-300 overflow-hidden"
+                    className="group relative w-full md:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium shadow-lg hover:shadow-blue-400/40 transition-all duration-300 overflow-hidden"
                   >
                     <span className="relative z-10 flex items-center">
                       Book Your Ride
                       <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </span>
-                    <span className="absolute inset-0 bg-gradient-to-r from-teal-500 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                   </Link>
                 </motion.div>
               </motion.div>
@@ -526,7 +587,7 @@ export default function Home() {
                 viewport={{ once: false, amount: 0.3 }}
                 transition={{ duration: 0.6, delay: 0.4, ease: "backOut" }}
               >
-                <div className="absolute inset-0 bg-gradient-to-b from-teal-900/10 via-transparent to-teal-900/10 z-10 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-b from-blue-50/10 via-transparent to-blue-50/10 z-10 pointer-events-none" />
                 <div className="h-full w-full p-4">
                   <CarPhotoGallery />
                 </div>
@@ -534,14 +595,14 @@ export default function Home() {
 
               {/* Right Column - Features */}
               <motion.div
-                className="p-8 md:p-10 bg-teal-900/30 backdrop-blur-sm"
+                className="p-8 md:p-10 bg-blue-50/30 backdrop-blur-sm"
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, amount: 0.3 }}
                 transition={{ duration: 0.6, delay: 0.6, ease: "backOut" }}
               >
                 <motion.h3
-                  className="text-2xl font-bold text-teal-100 mb-8 bg-gradient-to-r from-teal-100 to-teal-200 bg-clip-text"
+                  className="text-2xl font-bold text-gray-800 mb-8"
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7 }}
@@ -552,43 +613,43 @@ export default function Home() {
                 <div className="space-y-6">
                   {[
                     {
-                      icon: <ShieldCheck className="w-5 h-5 text-teal-300" />,
+                      icon: <ShieldCheck className="w-5 h-5 text-blue-500" />,
                       title: "Licensed Drivers",
                       description: "Professional, background-verified chauffeurs with years of experience",
-                      color: "from-teal-600/10 to-teal-700/20",
+                      color: "from-blue-100/50 to-blue-200/50",
                     },
                     {
-                      icon: <Car className="w-5 h-5 text-teal-300" />,
+                      icon: <Car className="w-5 h-5 text-blue-500" />,
                       title: "Luxury Fleet",
                       description: "Premium vehicles maintained to the highest standards",
-                      color: "from-cyan-600/10 to-cyan-700/20",
+                      color: "from-cyan-100/50 to-cyan-200/50",
                     },
                     {
-                      icon: <Clock className="w-5 h-5 text-teal-300" />,
+                      icon: <Clock className="w-5 h-5 text-blue-500" />,
                       title: "24/7 Service",
                       description: "Round-the-clock availability for all your transportation needs",
-                      color: "from-emerald-600/10 to-emerald-700/20",
+                      color: "from-emerald-100/50 to-emerald-200/50",
                     },
                   ].map((feature, i) => (
                     <motion.div
                       key={i}
-                      className={`p-4 rounded-xl bg-gradient-to-br ${feature.color} backdrop-blur-sm border border-teal-300/10 hover:border-teal-300/30 transition-all duration-300 relative overflow-hidden`}
+                      className={`p-4 rounded-xl bg-gradient-to-br ${feature.color} backdrop-blur-sm border border-blue-200/30 hover:border-blue-300/50 transition-all duration-300 relative overflow-hidden`}
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: false }}
                       transition={{ duration: 0.4, delay: 0.8 + i * 0.1 }}
                       whileHover={{
                         y: -5,
-                        boxShadow: "0 10px 25px -5px rgba(20, 184, 166, 0.1)",
+                        boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.1)",
                       }}
                     >
                       <div className="flex items-start relative z-10">
-                        <div className="p-2 rounded-lg bg-teal-700/30 mr-3 border border-teal-300/10">
+                        <div className="p-2 rounded-lg bg-blue-100/50 mr-3 border border-blue-200/30">
                           {feature.icon}
                         </div>
                         <div>
-                          <h4 className="font-semibold text-teal-100">{feature.title}</h4>
-                          <p className="text-sm text-teal-100/70 mt-1">{feature.description}</p>
+                          <h4 className="font-semibold text-gray-800">{feature.title}</h4>
+                          <p className="text-sm text-gray-600 mt-1">{feature.description}</p>
                         </div>
                       </div>
                     </motion.div>
@@ -596,25 +657,25 @@ export default function Home() {
                 </div>
 
                 <motion.div
-                  className="mt-8 p-5 rounded-xl bg-gradient-to-br from-teal-800/30 to-transparent border border-teal-300/10"
+                  className="mt-8 p-5 rounded-xl bg-gradient-to-br from-blue-100/30 to-transparent border border-blue-200/30"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: false }}
                   transition={{ duration: 0.5, delay: 1.4 }}
                 >
-                  <h4 className="font-semibold text-teal-100 mb-4">Our Car Services</h4>
+                  <h4 className="font-semibold text-gray-800 mb-4">Our Car Services</h4>
                   <div className="grid grid-cols-2 gap-3">
                     {carServices.map((service) => (
                       <motion.div
                         key={service.id}
-                        className="p-3 rounded-lg bg-teal-800/30 border border-teal-300/10 hover:border-teal-300/30 transition-all duration-300"
-                        whileHover={{ y: -2, boxShadow: "0 10px 15px -3px rgba(20, 184, 166, 0.1)" }}
+                        className="p-3 rounded-lg bg-blue-100/30 border border-blue-200/30 hover:border-blue-300/50 transition-all duration-300"
+                        whileHover={{ y: -2, boxShadow: "0 10px 15px -3px rgba(59, 130, 246, 0.1)" }}
                       >
                         <div className="flex items-center mb-2">
-                          <div className="mr-3 text-teal-300">{service.icon}</div>
-                          <h5 className="font-medium text-teal-100 text-sm">{service.name}</h5>
+                          <div className="mr-3 text-blue-500">{service.icon}</div>
+                          <h5 className="font-medium text-gray-800 text-sm">{service.name}</h5>
                         </div>
-                        <p className="text-xs text-teal-100/70">{service.description}</p>
+                        <p className="text-xs text-gray-600">{service.description}</p>
                       </motion.div>
                     ))}
                   </div>
@@ -623,13 +684,13 @@ export default function Home() {
             </div>
           </motion.div>
         </div>
-
       </div>
+
       {/* Cleaning Services Section */}
       <div
         id="cleaning-section"
         ref={cleaningRef}
-        className="relative w-full min-h-screen bg-gradient-to-br from-amber-900 to-yellow-700 overflow-hidden"
+        className="relative w-full min-h-screen bg-gradient-to-br from-amber-50 to-yellow-50 overflow-hidden"
       >
         {/* Animated floating bubbles background */}
         <div className="absolute inset-0 overflow-hidden">
@@ -639,7 +700,7 @@ export default function Home() {
             return (
               <motion.div
                 key={i}
-                className="absolute rounded-full bg-gradient-to-br from-amber-500/10 to-yellow-400/10 backdrop-blur-[1px]"
+                className="absolute rounded-full bg-gradient-to-br from-amber-200/30 to-yellow-200/30 backdrop-blur-[1px]"
                 initial={{
                   x: Math.random() * 100,
                   y: Math.random() * 100,
@@ -666,14 +727,14 @@ export default function Home() {
         {/* Main content container */}
         <div className="relative z-10 container mx-auto px-4 py-12 h-full flex items-center">
           <motion.div
-            className="w-full bg-gradient-to-br from-amber-800/20 via-amber-900/40 to-yellow-600/20 backdrop-blur-lg rounded-3xl shadow-2xl shadow-amber-900/30 border border-amber-300/20 overflow-hidden"
+            className="w-full bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl shadow-amber-100/50 border border-amber-200/50 overflow-hidden"
             initial={{ opacity: 0, scale: 0.98 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: false, amount: 0.3 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             {/* Three-column layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 h-full divide-x divide-amber-300/10">
+            <div className="grid grid-cols-1 lg:grid-cols-3 h-full divide-x divide-amber-100/50">
               {/* Left Column - Content & 3D View */}
               <motion.div
                 className="p-8 md:p-10 flex flex-col h-full"
@@ -689,23 +750,23 @@ export default function Home() {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
                   >
-                    <div className="p-2 rounded-lg bg-amber-500/20 backdrop-blur-sm border border-amber-300/10">
-                      <Droplet className="h-6 w-6 text-amber-200" />
+                    <div className="p-2 rounded-lg bg-amber-100/50 backdrop-blur-sm border border-amber-200/30">
+                      <Droplet className="h-6 w-6 text-amber-500" />
                     </div>
-                    <h1 className="ml-3 text-2xl font-bold text-amber-100 bg-gradient-to-r from-amber-100 to-amber-200 bg-clip-text">
+                    <h1 className="ml-3 text-2xl font-bold text-amber-600">
                       EcoClean
                     </h1>
                   </motion.div>
                   <motion.h2
-                    className="text-3xl md:text-4xl lg:text-5xl font-bold text-amber-50 mb-4 leading-tight"
+                    className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 leading-tight"
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
                   >
-                    Sustainable <span className="text-amber-300">Cleaning</span> Solutions
+                    Sustainable <span className="text-amber-500">Cleaning</span> Solutions
                   </motion.h2>
                   <motion.p
-                    className="text-amber-100/80 text-lg max-w-md"
+                    className="text-gray-600 text-lg max-w-md"
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
@@ -717,13 +778,12 @@ export default function Home() {
 
                 {/* Enhanced 3D View Container with Image Placeholder */}
                 <motion.div
-                  className="flex-1 min-h-[300px] rounded-xl overflow-hidden mb-6 border border-amber-300/20 shadow-inner shadow-amber-900/30 relative"
+                  className="flex-1 min-h-[300px] rounded-xl overflow-hidden mb-6 border border-amber-200/50 shadow-inner shadow-amber-100/30 relative"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
                 >
                   <ThreeDView />
-
                 </motion.div>
 
                 <motion.div
@@ -733,13 +793,13 @@ export default function Home() {
                 >
                   <Link
                     href="/cleaning-details"
-                    className="group relative w-full md:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 text-white font-medium shadow-lg hover:shadow-amber-500/40 transition-all duration-300 overflow-hidden"
+                    className="group relative w-full md:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-medium shadow-lg hover:shadow-amber-400/40 transition-all duration-300 overflow-hidden"
                   >
                     <span className="relative z-10 flex items-center">
                       Explore Our Process
                       <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </span>
-                    <span className="absolute inset-0 bg-gradient-to-r from-amber-500 to-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                   </Link>
                 </motion.div>
               </motion.div>
@@ -752,7 +812,7 @@ export default function Home() {
                 viewport={{ once: false, amount: 0.3 }}
                 transition={{ duration: 0.6, delay: 0.4, ease: "backOut" }}
               >
-                <div className="absolute inset-0 bg-gradient-to-b from-amber-900/10 via-transparent to-amber-900/10 z-10 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-b from-amber-50/10 via-transparent to-amber-50/10 z-10 pointer-events-none" />
                 <div className="h-full w-full p-4">
                   <PhotoGallery />
                 </div>
@@ -760,14 +820,14 @@ export default function Home() {
 
               {/* Right Column - Features */}
               <motion.div
-                className="p-8 md:p-10 bg-amber-900/30 backdrop-blur-sm"
+                className="p-8 md:p-10 bg-amber-50/30 backdrop-blur-sm"
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, amount: 0.3 }}
                 transition={{ duration: 0.6, delay: 0.6, ease: "backOut" }}
               >
                 <motion.h3
-                  className="text-2xl font-bold text-amber-100 mb-8 bg-gradient-to-r from-amber-100 to-amber-200 bg-clip-text"
+                  className="text-2xl font-bold text-gray-800 mb-8"
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7 }}
@@ -778,27 +838,27 @@ export default function Home() {
                 <div className="space-y-6">
                   {[
                     {
-                      icon: <Leaf className="w-5 h-5 text-lime-300" />,
+                      icon: <Leaf className="w-5 h-5 text-lime-500" />,
                       title: "100% Natural",
                       description: "Plant-derived ingredients that are safe for your family and pets",
-                      color: "from-lime-600/10 to-lime-700/20",
+                      color: "from-lime-100/50 to-lime-200/50",
                     },
                     {
-                      icon: <Recycle className="w-5 h-5 text-lime-300" />,
+                      icon: <Recycle className="w-5 h-5 text-lime-500" />,
                       title: "Eco Packaging",
                       description: "Biodegradable containers that reduce plastic waste",
-                      color: "from-teal-600/10 to-teal-700/20",
+                      color: "from-teal-100/50 to-teal-200/50",
                     },
                     {
-                      icon: <ShieldCheck className="w-5 h-5 text-lime-300" />,
+                      icon: <ShieldCheck className="w-5 h-5 text-lime-500" />,
                       title: "Proven Results",
                       description: "Clinically tested to be as effective as chemical cleaners",
-                      color: "from-emerald-600/10 to-emerald-700/20",
+                      color: "from-emerald-100/50 to-emerald-200/50",
                     },
                   ].map((feature, i) => (
                     <motion.div
                       key={i}
-                      className={`p-4 rounded-xl bg-gradient-to-br ${feature.color} backdrop-blur-sm border border-amber-300/10 hover:border-amber-300/30 transition-all duration-300 relative overflow-hidden`}
+                      className={`p-4 rounded-xl bg-gradient-to-br ${feature.color} backdrop-blur-sm border border-amber-200/30 hover:border-amber-300/50 transition-all duration-300 relative overflow-hidden`}
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: false }}
@@ -809,12 +869,12 @@ export default function Home() {
                       }}
                     >
                       <div className="flex items-start relative z-10">
-                        <div className="p-2 rounded-lg bg-amber-700/30 mr-3 border border-amber-300/10">
+                        <div className="p-2 rounded-lg bg-amber-100/50 mr-3 border border-amber-200/30">
                           {feature.icon}
                         </div>
                         <div>
-                          <h4 className="font-semibold text-amber-100">{feature.title}</h4>
-                          <p className="text-sm text-amber-100/70 mt-1">{feature.description}</p>
+                          <h4 className="font-semibold text-gray-800">{feature.title}</h4>
+                          <p className="text-sm text-gray-600 mt-1">{feature.description}</p>
                         </div>
                       </div>
                     </motion.div>
@@ -822,25 +882,25 @@ export default function Home() {
                 </div>
 
                 <motion.div
-                  className="mt-8 p-5 rounded-xl bg-gradient-to-br from-amber-800/30 to-transparent border border-amber-300/10"
+                  className="mt-8 p-5 rounded-xl bg-gradient-to-br from-amber-100/30 to-transparent border border-amber-200/30"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: false }}
                   transition={{ duration: 0.5, delay: 1.4 }}
                 >
-                  <h4 className="font-semibold text-amber-100 mb-4">Our Cleaning Services</h4>
+                  <h4 className="font-semibold text-gray-800 mb-4">Our Cleaning Services</h4>
                   <div className="grid grid-cols-2 gap-3">
                     {cleaningServices.map((service) => (
                       <motion.div
                         key={service.id}
-                        className="p-3 rounded-lg bg-amber-800/30 border border-amber-300/10 hover:border-amber-300/30 transition-all duration-300"
+                        className="p-3 rounded-lg bg-amber-100/30 border border-amber-200/30 hover:border-amber-300/50 transition-all duration-300"
                         whileHover={{ y: -2, boxShadow: "0 10px 15px -3px rgba(251, 191, 36, 0.1)" }}
                       >
                         <div className="flex items-center mb-2">
-                          <div className="mr-3 text-amber-300">{service.icon}</div>
-                          <h5 className="font-medium text-amber-100 text-sm">{service.name}</h5>
+                          <div className="mr-3 text-amber-500">{service.icon}</div>
+                          <h5 className="font-medium text-gray-800 text-sm">{service.name}</h5>
                         </div>
-                        <p className="text-xs text-amber-100/70">{service.description}</p>
+                        <p className="text-xs text-gray-600">{service.description}</p>
                       </motion.div>
                     ))}
                   </div>
@@ -850,11 +910,12 @@ export default function Home() {
           </motion.div>
         </div>        
       </div>
+
       {/* Grooming Services Section */}
       <div
         id="grooming-section"
         ref={groomingRef}
-        className="relative w-full min-h-screen bg-gradient-to-br from-blue-900 to-indigo-900 overflow-hidden"
+        className="relative w-full min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 overflow-hidden"
       >
         {/* Animated floating bubbles background */}
         <div className="absolute inset-0 overflow-hidden">
@@ -864,7 +925,7 @@ export default function Home() {
             return (
               <motion.div
                 key={i}
-                className="absolute rounded-full bg-gradient-to-br from-blue-500/10 to-indigo-400/10 backdrop-blur-[1px]"
+                className="absolute rounded-full bg-gradient-to-br from-indigo-200/30 to-blue-200/30 backdrop-blur-[1px]"
                 initial={{
                   x: Math.random() * 100,
                   y: Math.random() * 100,
@@ -891,14 +952,14 @@ export default function Home() {
         {/* Main content container */}
         <div className="relative z-10 container mx-auto px-4 py-12 h-full flex items-center">
           <motion.div
-            className="w-full bg-gradient-to-br from-blue-800/20 via-indigo-900/40 to-indigo-600/20 backdrop-blur-lg rounded-3xl shadow-2xl shadow-indigo-900/30 border border-blue-300/20 overflow-hidden"
+            className="w-full bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl shadow-indigo-100/50 border border-indigo-200/50 overflow-hidden"
             initial={{ opacity: 0, scale: 0.98 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: false, amount: 0.3 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             {/* Three-column layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 h-full divide-x divide-blue-300/10">
+            <div className="grid grid-cols-1 lg:grid-cols-3 h-full divide-x divide-indigo-100/50">
               {/* Left Column - Content & 3D View */}
               <motion.div
                 className="p-8 md:p-10 flex flex-col h-full"
@@ -914,23 +975,23 @@ export default function Home() {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
                   >
-                    <div className="p-2 rounded-lg bg-blue-500/20 backdrop-blur-sm border border-blue-300/10">
-                      <Scissors className="h-6 w-6 text-blue-200" />
+                    <div className="p-2 rounded-lg bg-indigo-100/50 backdrop-blur-sm border border-indigo-200/30">
+                      <Scissors className="h-6 w-6 text-indigo-500" />
                     </div>
-                    <h1 className="ml-3 text-2xl font-bold text-blue-100 bg-gradient-to-r from-blue-100 to-blue-200 bg-clip-text">
+                    <h1 className="ml-3 text-2xl font-bold text-indigo-600">
                       EliteGroom
                     </h1>
                   </motion.div>
                   <motion.h2
-                    className="text-3xl md:text-4xl lg:text-5xl font-bold text-blue-50 mb-4 leading-tight"
+                    className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 leading-tight"
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
                   >
-                    Precision <span className="text-blue-300">Grooming</span> Services
+                    Precision <span className="text-indigo-500">Grooming</span> Services
                   </motion.h2>
                   <motion.p
-                    className="text-blue-100/80 text-lg max-w-md"
+                    className="text-gray-600 text-lg max-w-md"
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
@@ -941,7 +1002,7 @@ export default function Home() {
                 </div>
                 {/* Enhanced 3D View Container with Image Placeholder */}
                 <motion.div
-                  className="flex-1 min-h-[300px] rounded-xl overflow-hidden mb-6 border border-blue-300/20 shadow-inner shadow-blue-900/30 relative"
+                  className="flex-1 min-h-[300px] rounded-xl overflow-hidden mb-6 border border-indigo-200/50 shadow-inner shadow-indigo-100/30 relative"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
@@ -955,13 +1016,13 @@ export default function Home() {
                 >
                   <Link
                     href="/grooming-details"
-                    className="group relative w-full md:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium shadow-lg hover:shadow-blue-500/40 transition-all duration-300 overflow-hidden"
+                    className="group relative w-full md:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-medium shadow-lg hover:shadow-indigo-400/40 transition-all duration-300 overflow-hidden"
                   >
                     <span className="relative z-10 flex items-center">
                       Book Appointment
                       <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </span>
-                    <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-indigo-400 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                   </Link>
                 </motion.div>
               </motion.div>
@@ -973,21 +1034,21 @@ export default function Home() {
                 viewport={{ once: false, amount: 0.3 }}
                 transition={{ duration: 0.6, delay: 0.4, ease: "backOut" }}
               >
-                <div className="absolute inset-0 bg-gradient-to-b from-indigo-900/10 via-transparent to-indigo-900/10 z-10 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-b from-indigo-50/10 via-transparent to-indigo-50/10 z-10 pointer-events-none" />
                 <div className="h-full w-full p-4">
                   <GroomingPhotoGallery />
                 </div>
               </motion.div>
               {/* Right Column - Features */}
               <motion.div
-                className="p-8 md:p-10 bg-indigo-900/30 backdrop-blur-sm"
+                className="p-8 md:p-10 bg-indigo-50/30 backdrop-blur-sm"
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, amount: 0.3 }}
                 transition={{ duration: 0.6, delay: 0.6, ease: "backOut" }}
               >
                 <motion.h3
-                  className="text-2xl font-bold text-blue-100 mb-8 bg-gradient-to-r from-blue-100 to-blue-200 bg-clip-text"
+                  className="text-2xl font-bold text-gray-800 mb-8"
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7 }}
@@ -997,43 +1058,43 @@ export default function Home() {
                 <div className="space-y-6">
                   {[
                     {
-                      icon: <Scissors className="w-5 h-5 text-blue-300" />,
+                      icon: <Scissors className="w-5 h-5 text-indigo-500" />,
                       title: "Precision Cuts",
                       description: "Master barbers trained in the latest techniques for perfect styling",
-                      color: "from-blue-600/10 to-blue-700/20",
+                      color: "from-indigo-100/50 to-indigo-200/50",
                     },
                     {
-                      icon: <Shield className="w-5 h-5 text-blue-300" />,
+                      icon: <Shield className="w-5 h-5 text-indigo-500" />,
                       title: "Hygienic Tools",
                       description: "Sterilized equipment and single-use products for your safety",
-                      color: "from-indigo-600/10 to-indigo-700/20",
+                      color: "from-blue-100/50 to-blue-200/50",
                     },
                     {
-                      icon: <Award className="w-5 h-5 text-blue-300" />,
+                      icon: <Award className="w-5 h-5 text-indigo-500" />,
                       title: "Premium Products",
                       description: "Luxury grooming products for lasting results and protection",
-                      color: "from-violet-600/10 to-violet-700/20",
+                      color: "from-violet-100/50 to-violet-200/50",
                     },
                   ].map((feature, i) => (
                     <motion.div
                       key={i}
-                      className={`p-4 rounded-xl bg-gradient-to-br ${feature.color} backdrop-blur-sm border border-blue-300/10 hover:border-blue-300/30 transition-all duration-300 relative overflow-hidden`}
+                      className={`p-4 rounded-xl bg-gradient-to-br ${feature.color} backdrop-blur-sm border border-indigo-200/30 hover:border-indigo-300/50 transition-all duration-300 relative overflow-hidden`}
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: false }}
                       transition={{ duration: 0.4, delay: 0.8 + i * 0.1 }}
                       whileHover={{
                         y: -5,
-                        boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.1)",
+                        boxShadow: "0 10px 25px -5px rgba(99, 102, 241, 0.1)",
                       }}
                     >
                       <div className="flex items-start relative z-10">
-                        <div className="p-2 rounded-lg bg-blue-700/30 mr-3 border border-blue-300/10">
+                        <div className="p-2 rounded-lg bg-indigo-100/50 mr-3 border border-indigo-200/30">
                           {feature.icon}
                         </div>
                         <div>
-                          <h4 className="font-semibold text-blue-100">{feature.title}</h4>
-                          <p className="text-sm text-blue-100/70 mt-1">{feature.description}</p>
+                          <h4 className="font-semibold text-gray-800">{feature.title}</h4>
+                          <p className="text-sm text-gray-600 mt-1">{feature.description}</p>
                         </div>
                       </div>
                     </motion.div>
@@ -1041,25 +1102,25 @@ export default function Home() {
                 </div>
 
                 <motion.div
-                  className="mt-8 p-5 rounded-xl bg-gradient-to-br from-blue-800/30 to-transparent border border-blue-300/10"
+                  className="mt-8 p-5 rounded-xl bg-gradient-to-br from-indigo-100/30 to-transparent border border-indigo-200/30"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: false }}
                   transition={{ duration: 0.5, delay: 1.4 }}
                 >
-                  <h4 className="font-semibold text-blue-100 mb-4">Our Grooming Services</h4>
+                  <h4 className="font-semibold text-gray-800 mb-4">Our Grooming Services</h4>
                   <div className="grid grid-cols-2 gap-3">
                     {groomingServices.map((service) => (
                       <motion.div
                         key={service.id}
-                        className="p-3 rounded-lg bg-blue-800/30 border border-blue-300/10 hover:border-blue-300/30 transition-all duration-300"
-                        whileHover={{ y: -2, boxShadow: "0 10px 15px -3px rgba(59, 130, 246, 0.1)" }}
+                        className="p-3 rounded-lg bg-indigo-100/30 border border-indigo-200/30 hover:border-indigo-300/50 transition-all duration-300"
+                        whileHover={{ y: -2, boxShadow: "0 10px 15px -3px rgba(99, 102, 241, 0.1)" }}
                       >
                         <div className="flex items-center mb-2">
-                          <div className="mr-3 text-blue-300">{service.icon}</div>
-                          <h5 className="font-medium text-blue-100 text-sm">{service.name}</h5>
+                          <div className="mr-3 text-indigo-500">{service.icon}</div>
+                          <h5 className="font-medium text-gray-800 text-sm">{service.name}</h5>
                         </div>
-                        <p className="text-xs text-blue-100/70">{service.description}</p>
+                        <p className="text-xs text-gray-600">{service.description}</p>
                       </motion.div>
                     ))}
                   </div>
@@ -1074,7 +1135,7 @@ export default function Home() {
       <div
         id="testimonials-section"
         ref={testimonialsRef}
-        className="py-20 bg-gradient-to-b from-gray-100 to-white relative overflow-hidden"
+        className="py-20 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden"
       >
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <motion.div
@@ -1084,7 +1145,7 @@ export default function Home() {
             viewport={{ once: false, amount: 0.3 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">What Our Clients Say</h2>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">What Our Clients Say</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Hear from our satisfied customers about their experience with our services
             </p>
@@ -1094,7 +1155,7 @@ export default function Home() {
             {testimonials.map((item, index) => (
               <motion.div
                 key={item.id}
-                className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
+                className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden border border-gray-100"
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: false, amount: 0.3 }}
@@ -1103,14 +1164,14 @@ export default function Home() {
               >
                 <div className="flex items-center mb-4 relative z-10">
                   <motion.div
-                    className="h-12 w-12 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold text-lg"
+                    className="h-12 w-12 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white font-bold text-lg"
                     whileHover={{ scale: 1.1 }}
                     transition={{ type: "spring", stiffness: 400, damping: 10 }}
                   >
                     {item.initials}
                   </motion.div>
                   <div className="ml-4">
-                    <h3 className="font-semibold text-gray-900">{item.name}</h3>
+                    <h3 className="font-semibold text-gray-800">{item.name}</h3>
                     <div className="flex">
                       {Array.from({ length: item.rating }).map((_, i) => (
                         <motion.div
@@ -1147,7 +1208,7 @@ export default function Home() {
           >
             <Link
               href="/testimonials"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-medium shadow-lg hover:shadow-blue-500/30 transition-all duration-300 group"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-medium shadow-lg hover:shadow-blue-400/30 transition-all duration-300 group"
             >
               <span>Read More Reviews</span>
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -1160,27 +1221,27 @@ export default function Home() {
       <footer
         id="footer-section"
         ref={footerRef}
-        className="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white relative overflow-hidden"
+        className="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 text-gray-800 relative overflow-hidden border-t border-gray-200"
       >
         <div className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Company info */}
             <motion.div
-              className="backdrop-blur-sm bg-white/5 rounded-2xl p-6 border border-white/10 shadow-xl"
+              className="backdrop-blur-sm bg-white/50 rounded-2xl p-6 border border-gray-200 shadow-lg"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false }}
               transition={{ duration: 0.5 }}
             >
               <div className="flex items-center mb-6">
-                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
+                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-cyan-300 to-blue-400 flex items-center justify-center">
                   <Droplet className="h-5 w-5 text-white" />
                 </div>
-                <h3 className="ml-3 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-200 to-blue-200">
+                <h3 className="ml-3 text-xl font-bold text-gray-800">
                   EliteServices
                 </h3>
               </div>
-              <p className="text-gray-300 mb-6">
+              <p className="text-gray-600 mb-6">
                 Premium car services, eco-friendly cleaning, and professional grooming solutions for modern lifestyles.
               </p>
               <div className="flex space-x-4">
@@ -1188,15 +1249,15 @@ export default function Home() {
                   <motion.a
                     key={social}
                     href="#"
-                    className="text-gray-400 hover:text-white transition-colors duration-300"
+                    className="text-gray-500 hover:text-gray-800 transition-colors duration-300"
                     whileHover={{ scale: 1.2, rotate: [0, 5, -5, 0] }}
                     transition={{ duration: 0.3 }}
                   >
                     <span className="sr-only">{social}</span>
-                    <div className="h-8 w-8 bg-gradient-to-br from-gray-700 to-gray-600 rounded-full flex items-center justify-center hover:from-cyan-600 hover:to-blue-600 transition-all duration-300">
-                      {social === "facebook" && <span className="text-sm font-bold">f</span>}
-                      {social === "instagram" && <span className="text-sm font-bold">i</span>}
-                      {social === "twitter" && <span className="text-sm font-bold">t</span>}
+                    <div className="h-8 w-8 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center hover:from-cyan-400 hover:to-blue-500 transition-all duration-300">
+                      {social === "facebook" && <span className="text-sm font-bold text-white">f</span>}
+                      {social === "instagram" && <span className="text-sm font-bold text-white">i</span>}
+                      {social === "twitter" && <span className="text-sm font-bold text-white">t</span>}
                     </div>
                   </motion.a>
                 ))}
@@ -1215,7 +1276,7 @@ export default function Home() {
                   { name: "Deep Cleaning", href: "/services/deep-cleaning" },
                 ],
                 icon: <CheckCircle className="h-5 w-5" />,
-                gradient: "from-teal-400 to-cyan-600",
+                gradient: "from-blue-300 to-cyan-400",
               },
               {
                 title: "Company",
@@ -1227,7 +1288,7 @@ export default function Home() {
                   { name: "Contact", href: "/contact" },
                 ],
                 icon: <Star className="h-5 w-5" />,
-                gradient: "from-amber-400 to-orange-600",
+                gradient: "from-amber-300 to-orange-400",
               },
               {
                 title: "Support",
@@ -1239,12 +1300,12 @@ export default function Home() {
                   { name: "FAQ", href: "/faq" },
                 ],
                 icon: <ShieldCheck className="h-5 w-5" />,
-                gradient: "from-blue-400 to-indigo-600",
+                gradient: "from-indigo-300 to-blue-400",
               },
             ].map((column, colIndex) => (
               <motion.div
                 key={column.title}
-                className="backdrop-blur-sm bg-white/5 rounded-2xl p-6 border border-white/10 shadow-xl"
+                className="backdrop-blur-sm bg-white/50 rounded-2xl p-6 border border-gray-200 shadow-lg"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: false }}
@@ -1256,7 +1317,7 @@ export default function Home() {
                   >
                     {column.icon}
                   </div>
-                  <h3 className="ml-3 text-lg font-bold">{column.title}</h3>
+                  <h3 className="ml-3 text-lg font-bold text-gray-800">{column.title}</h3>
                 </div>
                 <ul className="space-y-3">
                   {column.links.map((link, linkIndex) => (
@@ -1269,9 +1330,9 @@ export default function Home() {
                     >
                       <Link
                         href={link.href}
-                        className="text-gray-300 hover:text-white transition-colors duration-300 flex items-center group"
+                        className="text-gray-600 hover:text-gray-800 transition-colors duration-300 flex items-center group"
                       >
-                        <div className="h-1.5 w-1.5 rounded-full bg-gray-500 mr-2 group-hover:bg-white transition-colors duration-300"></div>
+                        <div className="h-1.5 w-1.5 rounded-full bg-gray-400 mr-2 group-hover:bg-gray-600 transition-colors duration-300"></div>
                         <span className="group-hover:translate-x-1 transition-transform">{link.name}</span>
                       </Link>
                     </motion.li>
@@ -1283,7 +1344,7 @@ export default function Home() {
 
           {/* Newsletter subscription */}
           <motion.div
-            className="mt-12 backdrop-blur-lg bg-white/5 rounded-2xl p-6 border border-white/10 shadow-xl"
+            className="mt-12 backdrop-blur-lg bg-white/50 rounded-2xl p-6 border border-gray-200 shadow-lg"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false }}
@@ -1291,17 +1352,17 @@ export default function Home() {
           >
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
               <div className="lg:col-span-1">
-                <h3 className="text-xl font-bold mb-2">Stay Updated</h3>
-                <p className="text-gray-300">Subscribe to our newsletter for exclusive offers and service updates.</p>
+                <h3 className="text-xl font-bold mb-2 text-gray-800">Stay Updated</h3>
+                <p className="text-gray-600">Subscribe to our newsletter for exclusive offers and service updates.</p>
               </div>
               <div className="lg:col-span-2">
                 <div className="flex flex-col sm:flex-row gap-4">
                   <input
                     type="email"
                     placeholder="Enter your email"
-                    className="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    className="flex-1 px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400"
                   />
-                  <button className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-cyan-500/25">
+                  <button className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-medium hover:from-cyan-500 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-cyan-400/25">
                     Subscribe
                   </button>
                 </div>
@@ -1311,7 +1372,7 @@ export default function Home() {
 
           {/* Bottom bar */}
           <motion.div
-            className="mt-12 pt-8 border-t border-white/10 text-center text-gray-400 relative"
+            className="mt-12 pt-8 border-t border-gray-200 text-center text-gray-500 relative"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: false }}
@@ -1320,13 +1381,13 @@ export default function Home() {
             <div className="flex flex-col md:flex-row justify-between items-center">
               <p>© 2025 EliteServices. All rights reserved.</p>
               <div className="flex space-x-6 mt-4 md:mt-0">
-                <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/privacy" className="text-gray-500 hover:text-gray-800 transition-colors">
                   Privacy Policy
                 </Link>
-                <Link href="/terms" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/terms" className="text-gray-500 hover:text-gray-800 transition-colors">
                   Terms of Service
                 </Link>
-                <Link href="/cookies" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/cookies" className="text-gray-500 hover:text-gray-800 transition-colors">
                   Cookie Policy
                 </Link>
               </div>

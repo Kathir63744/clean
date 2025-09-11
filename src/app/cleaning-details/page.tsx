@@ -35,7 +35,7 @@ const cleaningServices: Record<string, CleaningService> = {
       "/house-service.1.jpeg",
       "/house-service.3.jpeg",
     ],
-    icon: <Home className="w-8 h-8 text-amber-400" />,
+    icon: <Home className="w-8 h-8 text-amber-500" />,
   },
   kitchen: {
     title: "Kitchen Cleaning",
@@ -53,7 +53,7 @@ const cleaningServices: Record<string, CleaningService> = {
       "/Kitchen-Cleaning-Services. 2jpg.jpg",
       "/Kitchen-Cleaning-Services.jpg",
     ],
-    icon: <Droplet className="w-8 h-8 text-amber-400" />,
+    icon: <Droplet className="w-8 h-8 text-amber-500" />,
   },
   hospital: {
     title: "Hospital & Medical Cleaning",
@@ -71,7 +71,7 @@ const cleaningServices: Record<string, CleaningService> = {
       "/hospital 1.jpg",
       "/hospital 2.jpg",
     ],
-    icon: <Hospital className="w-8 h-8 text-amber-400" />,
+    icon: <Hospital className="w-8 h-8 text-amber-500" />,
   },
   car: {
     title: "Car Cleaning",
@@ -89,7 +89,7 @@ const cleaningServices: Record<string, CleaningService> = {
       "/car.jpg",
       "/car 1.jpg",
     ],
-    icon: <Car className="w-8 h-8 text-amber-400" />,
+    icon: <Car className="w-8 h-8 text-amber-500" />,
   },
   apartment: {
     title: "Apartment Cleaning",
@@ -107,7 +107,7 @@ const cleaningServices: Record<string, CleaningService> = {
       "/hospital.jpg",
       "/house-service.1.jpeg",
     ],
-    icon: <Building2 className="w-8 h-8 text-amber-400" />,
+    icon: <Building2 className="w-8 h-8 text-amber-500" />,
   },
 }
 
@@ -116,19 +116,19 @@ const bannerSlides = [
     image: "https://images.pexels.com/photos/4108270/pexels-photo-4108270.jpeg",
     title: "Professional Cleaning Services",
     subtitle: "We make every space shine with our expert cleaning solutions",
-    overlay: "bg-amber-900/70",
+    overlay: "bg-amber-700/60",
   },
   {
     image: "https://images.pexels.com/photos/4107297/pexels-photo-4107297.jpeg",
     title: "Custom Cleaning Plans",
     subtitle: "Tailored services to meet your specific needs and requirements",
-    overlay: "bg-amber-800/70",
+    overlay: "bg-amber-600/60",
   },
   {
     image: "https://images.pexels.com/photos/4107288/pexels-photo-4107288.jpeg",
     title: "Eco-Friendly Products",
     subtitle: "Safe for your family and the environment",
-    overlay: "bg-amber-700/70",
+    overlay: "bg-amber-500/60",
   },
 ]
 
@@ -136,22 +136,22 @@ const benefits = [
   {
     title: "Premium Quality",
     description: "We use only the highest quality products and equipment",
-    icon: <Sparkles className="w-6 h-6 text-amber-400" />,
+    icon: <Sparkles className="w-6 h-6 text-amber-500" />,
   },
   {
     title: "Safety First",
     description: "All our staff are fully trained and insured",
-    icon: <Shield className="w-6 h-6 text-amber-400" />,
+    icon: <Shield className="w-6 h-6 text-amber-500" />,
   },
   {
     title: "Eco-Friendly",
     description: "Environmentally safe cleaning products available",
-    icon: <Leaf className="w-6 h-6 text-amber-400" />,
+    icon: <Leaf className="w-6 h-6 text-amber-500" />,
   },
   {
     title: "Flexible Scheduling",
     description: "Available when you need us, including weekends",
-    icon: <CalendarCheck className="w-6 h-6 text-amber-400" />,
+    icon: <CalendarCheck className="w-6 h-6 text-amber-500" />,
   },
 ]
 
@@ -221,15 +221,47 @@ export default function CleaningDetails() {
   const activeService = cleaningServices[activeTab]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-950 via-amber-900 to-amber-800 overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-50 overflow-x-hidden">
+      {/* Animated Background Elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {Array.from({ length: 25 }).map((_, i) => {
+          const size = Math.random() * 120 + 30
+          const duration = Math.random() * 15 + 15
+          return (
+            <motion.div
+              key={i}
+              className="absolute rounded-full bg-gradient-to-br from-amber-200/30 to-yellow-200/30 backdrop-blur-[1px]"
+              initial={{
+                x: Math.random() * 100,
+                y: Math.random() * 100,
+                width: size,
+                height: size,
+                rotate: Math.random() * 360,
+              }}
+              animate={{
+                y: [0, Math.random() * 100 - 50],
+                x: [0, Math.random() * 100 - 50],
+                rotate: [0, 180, 360],
+              }}
+              transition={{
+                duration: duration,
+                repeat: Number.POSITIVE_INFINITY,
+                repeatType: "reverse",
+                ease: "easeInOut",
+              }}
+            />
+          )
+        })}
+      </div>
+      
       <NavBar />
       
-      <div className="pt-20">
+      <div className="pt-20 relative z-10">
         <BannerSlider slides={bannerSlides} theme="amber" />
       </div>
       
       <motion.div
-        className="px-4 sm:px-6 py-12 max-w-7xl mx-auto"
+        className="px-4 sm:px-6 py-12 max-w-7xl mx-auto relative z-10"
         variants={containerVariants}
         initial="hidden"
         animate={isLoaded ? "visible" : "hidden"}
@@ -237,7 +269,7 @@ export default function CleaningDetails() {
         <motion.div variants={itemVariants}>
           <Link
             href="/"
-            className="inline-flex items-center text-amber-300 hover:text-amber-100 mb-10 transition-colors duration-200 font-medium group"
+            className="inline-flex items-center text-amber-700 hover:text-amber-800 mb-10 transition-colors duration-200 font-medium group"
             aria-label="Back to home"
           >
             <ArrowLeft className="mr-2 h-5 w-5 transition-transform group-hover:-translate-x-1" />
@@ -247,15 +279,15 @@ export default function CleaningDetails() {
 
         <motion.div className="text-center mb-16" variants={itemVariants}>
           <motion.h1 
-            className="text-4xl md:text-6xl font-extrabold text-amber-50 tracking-tight"
+            className="text-4xl md:text-6xl font-extrabold text-gray-800 tracking-tight"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            Our <span className="bg-gradient-to-r from-amber-400 to-amber-500 bg-clip-text text-transparent">Cleaning Services</span>
+            Our <span className="bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent">Cleaning Services</span>
           </motion.h1>
           <motion.p 
-            className="mt-6 text-lg text-amber-200 max-w-3xl mx-auto leading-relaxed"
+            className="mt-6 text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
@@ -275,7 +307,7 @@ export default function CleaningDetails() {
             label={label}
             isActive={activeTab === key}
             onClick={() => setActiveTab(key)}
-            theme="dark-amber"
+            theme="amber"
             />
             ))}
         </motion.div>
@@ -283,44 +315,44 @@ export default function CleaningDetails() {
         <motion.div variants={itemVariants}>
           <ServiceHighlight
             service={activeService}
-            theme="dark-amber"
+            theme="amber"
           />
         </motion.div>
 
         <motion.div className="mt-24" variants={itemVariants}>
-          <h2 className="text-3xl md:text-4xl font-bold text-amber-50 text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
             Why Choose Our Services
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {benefits.map((benefit, index) => (
               <motion.div
                 key={index}
-                className="bg-amber-900/50 p-6 rounded-xl shadow-lg border border-amber-800 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 backdrop-blur-sm"
+                className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-amber-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 + index * 0.1 }}
                 whileHover={{ scale: 1.03 }}
               >
-                <div className="w-12 h-12 rounded-full bg-amber-800/50 flex items-center justify-center mb-4">
+                <div className="w-12 h-12 rounded-full bg-amber-100/80 flex items-center justify-center mb-4">
                   {benefit.icon}
                 </div>
-                <h3 className="text-xl font-bold text-amber-100 mb-2">{benefit.title}</h3>
-                <p className="text-amber-200">{benefit.description}</p>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">{benefit.title}</h3>
+                <p className="text-gray-600">{benefit.description}</p>
               </motion.div>
             ))}
           </div>
         </motion.div>
 
         <motion.div className="mt-24" variants={itemVariants}>
-          <div className="bg-gradient-to-r from-amber-800 to-amber-700 rounded-3xl p-8 md:p-12 shadow-2xl border border-amber-700/50">
-            <h2 className="text-3xl md:text-4xl font-bold text-amber-50 text-center mb-12">
+          <div className="bg-gradient-to-r from-amber-100/50 to-amber-200/30 rounded-3xl p-8 md:p-12 shadow-2xl border border-amber-200/50 backdrop-blur-sm">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
               What Our Customers Say
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {testimonials.map((testimonial, index) => (
                 <motion.div
                   key={index}
-                  className="bg-amber-900/50 p-6 rounded-2xl shadow-lg border border-amber-800/50 backdrop-blur-sm"
+                  className="bg-white/80 p-6 rounded-2xl shadow-lg border border-amber-200/50 backdrop-blur-sm"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 + index * 0.1 }}
@@ -337,11 +369,11 @@ export default function CleaningDetails() {
                       />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-amber-100 text-lg">{testimonial.name}</h3>
-                      <p className="text-amber-300 text-sm">{testimonial.service}</p>
+                      <h3 className="font-semibold text-gray-800 text-lg">{testimonial.name}</h3>
+                      <p className="text-amber-600 text-sm">{testimonial.service}</p>
                     </div>
                   </div>
-                  <p className="text-amber-100 italic leading-relaxed">&quot;{testimonial.quote}&quot;</p>
+                  <p className="text-gray-600 italic leading-relaxed">&quot;{testimonial.quote}&quot;</p>
                   <div className="mt-4 flex">
                     {[1, 2, 3, 4, 5].map(star => (
                       <svg
@@ -368,15 +400,15 @@ export default function CleaningDetails() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-amber-50 mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
             Ready to Experience the Difference?
           </h2>
-          <p className="text-xl text-amber-200 max-w-3xl mx-auto mb-8">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Book your cleaning service today and enjoy a spotless space tomorrow!
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <motion.button
-              className="px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 text-amber-950 font-bold rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105"
+              className="px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               aria-label="Book now"
@@ -384,7 +416,7 @@ export default function CleaningDetails() {
               Book Now
             </motion.button>
             <motion.button
-              className="px-8 py-4 bg-amber-900/50 text-amber-100 font-bold rounded-full shadow-lg hover:shadow-xl border border-amber-700 transition-all hover:scale-105 backdrop-blur-sm"
+              className="px-8 py-4 bg-white/80 text-amber-700 font-bold rounded-full shadow-lg hover:shadow-xl border border-amber-300 transition-all hover:scale-105 backdrop-blur-sm"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               aria-label="Contact us"

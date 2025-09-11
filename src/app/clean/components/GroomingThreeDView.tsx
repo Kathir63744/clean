@@ -1,6 +1,6 @@
 'use client'
 import { motion, useAnimation, useInView } from "framer-motion"
-import { Scissors,  Sparkles, Zap, Award, ShieldCheck } from "lucide-react"
+import { Scissors, Sparkles, Zap, Award, ShieldCheck } from "lucide-react"
 import { useEffect, useRef } from "react"
 import Image from "next/image"
 
@@ -39,19 +39,23 @@ export default function GroomingThreeDView() {
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.3 }}
         >
-          {/* Canvas for animated grooming tools */}
-          <canvas 
-            className="absolute inset-0 w-full h-full object-cover" 
-            ref={useRef<HTMLCanvasElement>(null)}
+          <Image
+            src="/man-gr.png"
+            alt="Premium Grooming Service"
+            fill
+            className="object-cover"
+            quality={85}
+            priority={false}
+            sizes="(max-width: 768px) 100vw, 80vw"
           />
 
           {/* Blue gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-blue-900/70 via-blue-800/30 to-transparent" />
-          
+
           {/* Noise texture */}
           <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-10" />
-          
-          {/* Top badge - blue version */}
+
+          {/* Top badge */}
           <motion.div
             className="absolute top-4 left-4 flex items-center bg-blue-800/50 backdrop-blur-sm px-3 py-1.5 rounded-full border border-blue-300/20"
             initial={{ y: -20, opacity: 0 }}
@@ -64,8 +68,8 @@ export default function GroomingThreeDView() {
             <Sparkles className="w-5 h-5 text-blue-300 mr-2" />
             <span className="text-white font-medium text-sm">Professional Grooming</span>
           </motion.div>
-          
-          {/* Features floating badges - blue */}
+
+          {/* Features floating badges */}
           <div className="absolute top-16 right-4 flex flex-col space-y-2">
             {features.map((feature, i) => (
               <motion.div
@@ -85,8 +89,8 @@ export default function GroomingThreeDView() {
               </motion.div>
             ))}
           </div>
-          
-          {/* Bottom info card - blue */}
+
+          {/* Bottom info card */}
           <motion.div
             className="absolute bottom-4 left-4 right-4"
             initial={{ y: 20, opacity: 0 }}
@@ -110,7 +114,9 @@ export default function GroomingThreeDView() {
                   whileTap={{ scale: 0.95 }}
                   className="bg-blue-600 hover:bg-blue-500 text-white rounded-lg p-2 cursor-pointer transition-colors"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                       strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
                     <polygon points="10 8 16 12 10 16 10 8"></polygon>
                   </svg>
@@ -118,8 +124,8 @@ export default function GroomingThreeDView() {
               </div>
             </div>
           </motion.div>
-          
-          {/* Interactive floating elements - blue */}
+
+          {/* Floating animated orbs */}
           <motion.div
             className="absolute top-1/3 left-1/4 w-8 h-8 rounded-full bg-blue-400/20 backdrop-blur-sm border border-blue-300/30"
             animate={{

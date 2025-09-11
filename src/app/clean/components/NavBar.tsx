@@ -10,7 +10,7 @@ import Slider from "./Slider";
 const PLACEHOLDER_TEXTS = [
   "Cleaning...",
   "Grooming...",
-  "Bike Taxi...",
+  "Taxi...",
   "Products..."
 ];
 

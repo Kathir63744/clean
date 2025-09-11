@@ -11,14 +11,9 @@ import TaxiServiceTab from "../clean/components/BikeServiceTab"
 const TaxiService = () => {
   const [activeTab, setActiveTab] = useState("premium")
   const [isLoaded, setIsLoaded] = useState(false)
-  const [activeFeature, setActiveFeature] = useState(0)
 
   useEffect(() => {
     setIsLoaded(true)
-    const interval = setInterval(() => {
-      setActiveFeature(prev => (prev + 1) % 3)
-    }, 3000)
-    return () => clearInterval(interval)
   }, [])
 
   const taxiServices = {
@@ -108,14 +103,14 @@ const TaxiService = () => {
       title: "Premium Taxi Services",
       subtitle: "Travel in comfort with our professional drivers",
       cta: "Book Now",
-      overlay: "bg-teal-900/60"
+      overlay: "bg-blue-900/60"
     },
     {
       image: "https://images.unsplash.com/photo-1502877338535-766e1452684a",
       title: "Airport Transfer Specialists",
       subtitle: "Fixed rates with flight tracking",
       cta: "Pre-book Now",
-      overlay: "bg-emerald-900/60"
+      overlay: "bg-cyan-900/60"
     }
   ]
 
@@ -165,24 +160,56 @@ const TaxiService = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-950 to-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 overflow-x-hidden">
       <NavBar />
       
+      {/* Animated Background Elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {Array.from({ length: 25 }).map((_, i) => {
+          const size = Math.random() * 120 + 30
+          const duration = Math.random() * 15 + 15
+          return (
+            <motion.div
+              key={i}
+              className="absolute rounded-full bg-gradient-to-br from-blue-200/30 to-cyan-200/30 backdrop-blur-[1px]"
+              initial={{
+                x: Math.random() * 100,
+                y: Math.random() * 100,
+                width: size,
+                height: size,
+                rotate: Math.random() * 360,
+              }}
+              animate={{
+                y: [0, Math.random() * 100 - 50],
+                x: [0, Math.random() * 100 - 50],
+                rotate: [0, 180, 360],
+              }}
+              transition={{
+                duration: duration,
+                repeat: Number.POSITIVE_INFINITY,
+                repeatType: "reverse",
+                ease: "easeInOut",
+              }}
+            />
+          )
+        })}
+      </div>
+      
       {/* Animated Banner Slider */}
-      <div className="pt-16">
-        <ThemedBannerSlider slides={bannerSlides} theme="teal" />
+      <div className="pt-16 relative z-10">
+        <ThemedBannerSlider slides={bannerSlides} theme="blue" />
       </div>
 
       {/* Main Content */}
       <motion.div
-        className="px-4 py-12 max-w-7xl mx-auto"
+        className="px-4 py-12 max-w-7xl mx-auto relative z-10"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         {/* Back Button */}
         <motion.div variants={itemVariants}>
-          <Link href="/" className="group flex items-center text-teal-400 hover:text-teal-300 mb-8 transition-colors w-fit">
+          <Link href="/" className="group flex items-center text-blue-600 hover:text-blue-700 mb-8 transition-colors w-fit">
             <ArrowLeft className="mr-2 h-5 w-5 group-hover:-translate-x-1 transition-transform" />
             <span>Back to Home</span>
           </Link>
@@ -191,17 +218,17 @@ const TaxiService = () => {
         {/* Page Header */}
         <motion.div className="text-center mb-16" variants={itemVariants}>
           <motion.h1
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-100 mb-6"
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-cyan-500">
               Premium Taxi Services
             </span>
           </motion.h1>
           <motion.p
-            className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
+            className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
@@ -222,7 +249,7 @@ const TaxiService = () => {
               label={tab.label}
               isActive={activeTab === tab.key}
               onClick={() => setActiveTab(tab.key)}
-              theme="teal"
+              theme="blue"
             />
           ))}
         </motion.div>
@@ -237,94 +264,96 @@ const TaxiService = () => {
             transition={{ duration: 0.3 }}
             className="mb-24"
           >
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              {/* Image Gallery */}
-              <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-2xl">
-                <div className="absolute inset-0 bg-gradient-to-r from-teal-500/10 to-emerald-500/10 z-10" />
-                <Image
-                  src={activeService.images[0]}
-                  alt={activeService.title}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-                {/* Floating Badges */}
-                <div className="absolute bottom-4 left-4 flex gap-2">
-                  {activeService.highlights.map((highlight, i) => (
-                    <motion.span
-                      key={i}
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.2 + i * 0.1 }}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-teal-900/80 text-teal-100 backdrop-blur-sm"
-                    >
-                      {highlight}
-                    </motion.span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Service Content */}
-              <div>
-                <motion.h2
-                  className="text-3xl md:text-4xl font-bold text-gray-100 mb-4"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  {activeService.title}
-                </motion.h2>
-                <motion.p
-                  className="text-lg text-gray-300 mb-8 leading-relaxed"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  {activeService.description}
-                </motion.p>
-
-                {/* Features Grid */}
-                <motion.div
-                  className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
-                  variants={containerVariants}
-                >
-                  {activeService.features.map((feature, i) => {
-                    const Icon = feature.icon
-                    return (
-                      <motion.div
+            <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl shadow-blue-100/50 border border-blue-200/50 overflow-hidden">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
+                {/* Image Gallery */}
+                <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-lg">
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 z-10" />
+                  <Image
+                    src={activeService.images[0]}
+                    alt={activeService.title}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                  {/* Floating Badges */}
+                  <div className="absolute bottom-4 left-4 flex gap-2">
+                    {activeService.highlights.map((highlight, i) => (
+                      <motion.span
                         key={i}
-                        custom={i}
-                        variants={featureVariants}
-                        className="flex items-start gap-3 bg-gray-800/50 p-4 rounded-lg backdrop-blur-sm border border-gray-700 hover:border-teal-400/30 transition-all"
-                        whileHover={{ y: -3 }}
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.2 + i * 0.1 }}
+                        className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-600/80 text-white backdrop-blur-sm"
                       >
-                        {typeof Icon === 'string' ? (
-                          <span className="text-teal-400 font-bold text-lg">{Icon}</span>
-                        ) : (
-                          <Icon className="text-teal-400 h-5 w-5 mt-0.5 flex-shrink-0" />
-                        )}
-                        <span className="text-gray-200">{feature.text}</span>
-                      </motion.div>
-                    )
-                  })}
-                </motion.div>
+                        {highlight}
+                      </motion.span>
+                    ))}
+                  </div>
+                </div>
 
-                {/* Stats */}
-                <motion.div
-                  className="flex flex-wrap gap-6"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.6 }}
-                >
-                  {activeService.stats.map((stat, i) => (
-                    <div key={i} className="text-center">
-                      <div className="text-3xl font-bold text-teal-400">{stat.value}</div>
-                      <div className="text-sm text-gray-400 uppercase tracking-wider mt-1">
-                        {stat.label}
+                {/* Service Content */}
+                <div>
+                  <motion.h2
+                    className="text-3xl md:text-4xl font-bold text-gray-800 mb-4"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    {activeService.title}
+                  </motion.h2>
+                  <motion.p
+                    className="text-lg text-gray-600 mb-8 leading-relaxed"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    {activeService.description}
+                  </motion.p>
+
+                  {/* Features Grid */}
+                  <motion.div
+                    className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
+                    variants={containerVariants}
+                  >
+                    {activeService.features.map((feature, i) => {
+                      const Icon = feature.icon
+                      return (
+                        <motion.div
+                          key={i}
+                          custom={i}
+                          variants={featureVariants}
+                          className="flex items-start gap-3 bg-blue-50/50 p-4 rounded-lg backdrop-blur-sm border border-blue-200/50 hover:border-blue-300/50 transition-all"
+                          whileHover={{ y: -3 }}
+                        >
+                          {typeof Icon === 'string' ? (
+                            <span className="text-blue-500 font-bold text-lg">{Icon}</span>
+                          ) : (
+                            <Icon className="text-blue-500 h-5 w-5 mt-0.5 flex-shrink-0" />
+                          )}
+                          <span className="text-gray-700">{feature.text}</span>
+                        </motion.div>
+                      )
+                    })}
+                  </motion.div>
+
+                  {/* Stats */}
+                  <motion.div
+                    className="flex flex-wrap gap-6"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.6 }}
+                  >
+                    {activeService.stats.map((stat, i) => (
+                      <div key={i} className="text-center">
+                        <div className="text-3xl font-bold text-blue-500">{stat.value}</div>
+                        <div className="text-sm text-gray-500 uppercase tracking-wider mt-1">
+                          {stat.label}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </motion.div>
+                    ))}
+                  </motion.div>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -340,7 +369,7 @@ const TaxiService = () => {
         >
           <div className="text-center mb-16">
             <motion.h2
-              className="text-3xl md:text-4xl font-bold text-gray-100 mb-4"
+              className="text-3xl md:text-4xl font-bold text-gray-800 mb-4"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -349,7 +378,7 @@ const TaxiService = () => {
               Trusted by Thousands
             </motion.h2>
             <motion.p
-              className="text-lg text-gray-400 max-w-2xl mx-auto"
+              className="text-lg text-gray-600 max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -385,7 +414,7 @@ const TaxiService = () => {
             ].map((testimonial, i) => (
               <motion.div
                 key={i}
-                className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-teal-400/20 hover:border-teal-400/50 transition-all"
+                className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-blue-200/50 hover:border-blue-300/50 transition-all"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
@@ -393,7 +422,7 @@ const TaxiService = () => {
                 whileHover={{ y: -5 }}
               >
                 <div className="flex items-start mb-4 gap-4">
-                  <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 bg-gray-700">
+                  <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 bg-gray-200">
                     <Image
                       src={testimonial.avatar}
                       alt={testimonial.name}
@@ -403,16 +432,16 @@ const TaxiService = () => {
                     />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-100">{testimonial.name}</h3>
-                    <p className="text-teal-400 text-sm">{testimonial.role}</p>
+                    <h3 className="font-semibold text-gray-800">{testimonial.name}</h3>
+                    <p className="text-blue-500 text-sm">{testimonial.role}</p>
                   </div>
                 </div>
-                <p className="text-gray-300 mb-4 italic">"{testimonial.quote}"</p>
+                <p className="text-gray-600 mb-4 italic">"{testimonial.quote}"</p>
                 <div className="flex gap-1">
                   {Array(5).fill(0).map((_, j) => (
                     <Star
                       key={j}
-                      className={`w-5 h-5 ${j < testimonial.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-600"}`}
+                      className={`w-5 h-5 ${j < testimonial.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
                     />
                   ))}
                 </div>
@@ -429,9 +458,9 @@ const TaxiService = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <div className="bg-gradient-to-r from-teal-900/50 to-emerald-900/50 rounded-2xl p-8 md:p-12 backdrop-blur-sm border border-teal-400/20">
+          <div className="bg-gradient-to-r from-blue-100/50 to-cyan-100/50 rounded-2xl p-8 md:p-12 backdrop-blur-sm border border-blue-200/50">
             <motion.h2
-              className="text-3xl md:text-4xl font-bold text-gray-100 mb-6"
+              className="text-3xl md:text-4xl font-bold text-gray-800 mb-6"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -440,7 +469,7 @@ const TaxiService = () => {
               Ready for Your Next Ride?
             </motion.h2>
             <motion.p
-              className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto"
+              className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -455,11 +484,11 @@ const TaxiService = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
             >
-              <button className="bg-teal-600 hover:bg-teal-700 text-white font-medium px-8 py-3 rounded-lg shadow-lg transition-all transform hover:scale-105 flex items-center gap-2">
+              <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3 rounded-lg shadow-lg transition-all transform hover:scale-105 flex items-center gap-2">
                 <Phone className="w-5 h-5" />
                 <span>Download App</span>
               </button>
-              <button className="bg-transparent border-2 border-teal-400 text-teal-400 hover:bg-teal-400/10 font-medium px-8 py-3 rounded-lg transition-all flex items-center gap-2">
+              <button className="bg-transparent border-2 border-blue-500 text-blue-600 hover:bg-blue-50 font-medium px-8 py-3 rounded-lg transition-all flex items-center gap-2">
                 <Car className="w-5 h-5" />
                 <span>Book Now</span>
               </button>

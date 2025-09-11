@@ -75,7 +75,7 @@ const heroConfig: HeroConfig = {
   },
   categories: {
     bike: {
-      name: "Bike Services",
+      name: "Taxi Services",
       buttonColor: "bg-teal-500 hover:bg-blue-600"
     },
     cleaning: {
@@ -154,7 +154,7 @@ const heroConfig: HeroConfig = {
       id: 3,
       title: 'Best Experiences',
       description: 'Adventure awaits on four wheels',
-      videoUrl: '/ride.mp4',
+      videoUrl: '/taxi.mp4',
       poster: '/bike-poster.jpg',
       category: 'bike'
     }
