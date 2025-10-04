@@ -2,7 +2,22 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { Sparkle, ChevronLeft, ChevronRight } from 'lucide-react'
+import { 
+  Sparkle, 
+  ChevronLeft, 
+  ChevronRight, 
+  Play, 
+  Star, 
+  Shield,
+  Clock,
+  Users,
+  Award,
+  CheckCircle,
+  MapPin,
+  Calendar,
+  Phone,
+  MessageCircle
+} from 'lucide-react'
 
 // ===== TYPE DEFINITIONS =====
 type ServiceCategory = 'grooming' | 'cleaning' | 'bike'
@@ -17,6 +32,9 @@ interface Service {
     color: BadgeColor
   }
   category: ServiceCategory
+  rating?: number
+  time?: string
+  price?: string
 }
 
 interface VideoSlide {
@@ -26,11 +44,14 @@ interface VideoSlide {
   videoUrl: string
   poster: string
   category: ServiceCategory
+  features: string[]
 }
 
 interface CategoryConfig {
   name: string
   buttonColor: string
+  icon: React.ReactNode
+  stats: string
 }
 
 interface HeroConfig {
@@ -52,11 +73,20 @@ interface HeroConfig {
   buttons: {
     explore: string
     contact: string
+    download: string
   }
   colors: {
     badge: Record<BadgeColor, string>
     serviceCard: Record<ServiceCategory, string>
   }
+  features: {
+    icon: React.ReactNode
+    text: string
+  }[]
+  stats: {
+    value: string
+    label: string
+  }[]
 }
 
 // ===== CONFIGURATION =====
@@ -64,119 +94,162 @@ const heroConfig: HeroConfig = {
   header: {
     badge: {
       icon: <Sparkle className="w-4 h-4" />,
-      text: "Trusted Home Services",
-      bgColor: "bg-cyan-50 dark:bg-cyan-900/20",
-      textColor: "text-cyan-700 dark:text-cyan-300"
+      text: "⭐ Trusted by 10K+ Customers",
+      bgColor: "bg-gradient-to-r from-blue-50 to-cyan-50",
+      textColor: "text-blue-700"
     },
-    title: "Home services at your",
-    titleHighlight: "doorstep",
-    highlightColor: "text-cyan-600",
-    description: "Professional services delivered to your home. Book trusted experts for cleaning, beauty, repairs, and more."
-  },
+    title: "Experience premium services",
+titleHighlight: "right to your door",
+    highlightColor: "text-blue-600",
+    description: "Experience the convenience of professional home services. Book experts for cleaning, grooming, and transportation with guaranteed satisfaction."
+  }, 
   categories: {
     bike: {
       name: "Taxi Services",
-      buttonColor: "bg-teal-500 hover:bg-blue-600"
+      buttonColor: "bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600",
+      icon: <MapPin className="w-4 h-4" />,
+      stats: "5min arrival"
     },
     cleaning: {
       name: "Cleaning",
-      buttonColor: "bg-amber-500 hover:bg-green-600"
+      buttonColor: "bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600",
+      icon: <Shield className="w-4 h-4" />,
+      stats: "Spotless guarantee"
     },
     grooming: {
       name: "Grooming",
-      buttonColor: "bg-blue-500 hover:bg-pink-600"
+      buttonColor: "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600",
+      icon: <Award className="w-4 h-4" />,
+      stats: "Expert stylists"
     },
   },
   services: [
     {
-      title: 'Book a Taxi Ride',
+      title: 'Premium Taxi Rides',
       iconSrc: '/car2.png',
-      description: 'Fast and affordable rides for daily travel',
-      category: 'bike'
-    },
-    {
-      title: 'Become a Star Customer',
-      iconSrc: '/car1.png',
-      description: 'Join as a customer and start earning today',
-      category: 'bike'
-    },
-    {
-      title: 'Home Cleaning',
-      iconSrc: '/house-cleaning.png',
-      description: 'Deep cleaning for your living space',
-      category: 'cleaning'
-    },
-    {
-      title: 'Car Cleaning',
-      iconSrc: '/car.png',
-      description: 'Professional detailing inside & out',
-      category: 'cleaning',
+      description: 'Luxury cars with professional drivers',
+      category: 'bike',
+      rating: 4.9,
+      time: '5-10 min',
+      price: '₹99 onwards',
       badge: {
-        text: 'Sale',
-        color: 'red'
-      }
-    },
-    {
-      title: 'Hair Grooming',
-      iconSrc: '/wax.png',
-      description: 'Professional styling for men & women',
-      category: 'grooming',
-      badge: {
-        text: 'Popular',
+        text: 'Fast',
         color: 'green'
       }
     },
     {
-      title: 'Pet Grooming',
+      title: 'Elite Membership',
+      iconSrc: '/car1.png',
+      description: 'Exclusive benefits & priority service',
+      category: 'bike',
+      rating: 4.8,
+      price: 'Join Free'
+    },
+    {
+      title: 'Deep Home Cleaning',
+      iconSrc: '/house-cleaning.png',
+      description: 'Complete home sanitization',
+      category: 'cleaning',
+      rating: 4.9,
+      time: '2-3 hours',
+      price: '₹499',
+      badge: {
+        text: 'Popular',
+        color: 'red'
+      }
+    },
+    {
+      title: 'Car Detailing',
+      iconSrc: '/car.png',
+      description: 'Premium interior & exterior cleaning',
+      category: 'cleaning',
+      rating: 4.7,
+      time: '1-2 hours',
+      price: '₹799'
+    },
+    {
+      title: 'Hair Styling',
+      iconSrc: '/wax.png',
+      description: 'Professional cuts & styling',
+      category: 'grooming',
+      rating: 4.9,
+      time: '45 min',
+      price: '₹299',
+      badge: {
+        text: 'Trending',
+        color: 'purple'
+      }
+    },
+    {
+      title: 'Pet Spa & Grooming',
       iconSrc: '/pet.png',
-      description: 'Spa treatments for your pets',
-      category: 'grooming'
+      description: 'Luxury treatments for pets',
+      category: 'grooming',
+      rating: 4.8,
+      time: '1 hour',
+      price: '₹599'
     }
   ],
   videoSlides: [
     {
       id: 1,
-      title: 'Premium Grooming Services',
-      description: 'Professional stylists at your doorstep',
+      title: 'Luxury Grooming Experience',
+      description: 'Professional stylists with premium products at your doorstep',
       videoUrl: '/groom.mp4',
       poster: '/home-salon-service.png',
-      category: 'grooming'
+      category: 'grooming',
+      features: ['Expert Stylists', 'Premium Products', 'Home Service']
     },
     {
       id: 2,
-      title: 'Deep Cleaning Solutions',
-      description: 'Spotless results every time',
+      title: 'Deep Cleaning Experts',
+      description: 'Eco-friendly cleaning with 100% satisfaction guarantee',
       videoUrl: '/clea.mp4',
       poster: '/cleaning-poster.jpg',
-      category: 'cleaning'
+      category: 'cleaning',
+      features: ['Eco-Friendly', 'Trained Staff', 'Spotless Guarantee']
     },
     {
       id: 3,
-      title: 'Best Experiences',
-      description: 'Adventure awaits on four wheels',
+      title: 'Premium Rides',
+      description: 'Luxury cars with professional chauffeurs',
       videoUrl: '/taxi.mp4',
       poster: '/bike-poster.jpg',
-      category: 'bike'
+      category: 'bike',
+      features: ['Luxury Cars', 'Professional Drivers', '24/7 Service']
     }
   ],
   buttons: {
-    explore: "Explore Services",
-    contact: "Contact Us"
+    explore: "Explore All Services",
+    contact: "Book Now",
+    download: "Download App"
   },
   colors: {
     badge: {
-      red: 'bg-red-500 text-white',
-      green: 'bg-green-500 text-white',
-      blue: 'bg-blue-500 text-white',
-      yellow: 'bg-yellow-500 text-white',
-      purple: 'bg-purple-500 text-white'
+      red: 'bg-red-500 text-white shadow-lg shadow-red-500/25',
+      green: 'bg-green-500 text-white shadow-lg shadow-green-500/25',
+      blue: 'bg-blue-500 text-white shadow-lg shadow-blue-500/25',
+      yellow: 'bg-yellow-500 text-white shadow-lg shadow-yellow-500/25',
+      purple: 'bg-purple-500 text-white shadow-lg shadow-purple-500/25'
     },
     serviceCard: {
-      grooming: 'bg-gradient-to-br from-pink-50 to-pink-100 hover:from-pink-100 hover:to-pink-150',
-      cleaning: 'bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-150',
-      bike: 'bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-150'
+      grooming: 'bg-gradient-to-br from-purple-50 to-pink-50 hover:from-purple-100 hover:to-pink-100 border-purple-200',
+      cleaning: 'bg-gradient-to-br from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 border-green-200',
+      bike: 'bg-gradient-to-br from-blue-50 to-cyan-50 hover:from-blue-100 hover:to-cyan-100 border-blue-200'
     }
-  }
+  },
+  features: [
+    { icon: <Shield className="w-5 h-5" />, text: "Verified Professionals" },
+    { icon: <Clock className="w-5 h-5" />, text: "Quick Service" },
+    { icon: <Award className="w-5 h-5" />, text: "Quality Guaranteed" },
+    { icon: <Users className="w-5 h-5" />, text: "10K+ Happy Customers" }
+  ],
+  stats: [
+    { value: "50K+", label: "Services Done" },
+    { value: "4.9/5", label: "Customer Rating" },
+    { value: "98%", label: "Satisfaction Rate" },
+    { value: "15min", label: "Average Response" }
+  ]
 }
 
 const HeroSection = () => {
@@ -196,8 +269,8 @@ const HeroSection = () => {
       setTimeout(() => {
         setCurrentSlide((prev) => (prev + 1) % heroConfig.videoSlides.length)
         setFadeClass('opacity-100')
-      }, 300)
-    }, 8000)
+      }, 500)
+    }, 6000)
 
     return () => clearInterval(interval)
   }, [isAutoPlaying])
@@ -226,9 +299,8 @@ const HeroSection = () => {
         )
       }
       setFadeClass('opacity-100')
-    }, 300)
+    }, 500)
     
-    // Resume auto-play after 8 seconds
     setTimeout(() => setIsAutoPlaying(true), 8000)
   }
 
@@ -244,190 +316,287 @@ const HeroSection = () => {
   const currentSlideData = heroConfig.videoSlides[currentSlide]
 
   return (
-    <section className="w-full mt-5 min-h-screen bg-white dark:bg-gray-900 flex flex-col lg:flex-row">
-      {/* Left Content - Services */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center px-6 md:px-12 lg:px-16 py-12 lg:py-20">
-        <div className="max-w-lg">
-          {/* Premium Badge */}
-          <div className={`flex items-center gap-2 ${heroConfig.header.badge.bgColor} ${heroConfig.header.badge.textColor} px-4 py-2 rounded-full w-max mb-8`}>
-            {heroConfig.header.badge.icon}
-            <span className="font-medium text-sm">{heroConfig.header.badge.text}</span>
-          </div>
+    <section className="w-full min-h-screen bg-gradient-to-br from-white via-blue-50/30 to-cyan-50/20 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-20 -right-20 w-80 h-80 bg-blue-200/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-purple-200/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-200/10 rounded-full blur-3xl"></div>
+      </div>
 
-          {/* Main Heading */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
-            {heroConfig.header.title}{' '}
-            <span className={heroConfig.header.highlightColor}>{heroConfig.header.titleHighlight}</span>
-          </h1>
+      {/* Main Content */}
+      <div className="relative max-w-7xl mx-auto px-4 py-8 lg:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          
+          {/* Left Content - Services */}
+          <div className="flex flex-col justify-center space-y-8">
+            {/* Header Section */}
+            <div className="space-y-6">
+              <div className={`inline-flex items-center gap-2 ${heroConfig.header.badge.bgColor} ${heroConfig.header.badge.textColor} px-4 py-2 rounded-full font-medium border border-blue-200/50 backdrop-blur-sm`}>
+                {heroConfig.header.badge.icon}
+                <span className="text-sm">{heroConfig.header.badge.text}</span>
+              </div>
 
-          {/* Description */}
-          <p className="text-gray-600 dark:text-gray-300 text-lg mb-8">
-            {heroConfig.header.description}
-          </p>
+<div className="space-y-4">
+  <div className="flex items-baseline flex-wrap">
+    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight whitespace-nowrap">
+      {heroConfig.header.title}{' '}
+      <span className={`${heroConfig.header.highlightColor} bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent`}>
+        {heroConfig.header.titleHighlight}
+      </span>
+    </h1>
+  </div>
+  <p className="text-gray-600 text-lg md:text-xl max-w-lg leading-relaxed">
+    {heroConfig.header.description}
+  </p>
+</div>
+            </div>
 
-          {/* Category Filters */}
-          <div className="flex flex-wrap gap-3 mb-6">
-            <button
-              onClick={() => setActiveCategory('all')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                activeCategory === 'all' 
-                  ? 'bg-gray-900 text-white' 
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-              }`}
-            >
-              All Services
-            </button>
-            {(Object.keys(heroConfig.categories) as ServiceCategory[]).map((category) => (
-              <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  activeCategory === category 
-                    ? heroConfig.categories[category].buttonColor + ' text-white' 
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-                }`}
-              >
-                {heroConfig.categories[category].name}
-              </button>
-            ))}
-          </div>
+            {/* Features Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {heroConfig.features.map((feature, index) => (
+                <div key={index} className="flex items-center gap-2 p-3 bg-white/80 backdrop-blur-sm rounded-lg border border-gray-200/50 shadow-sm">
+                  <div className="text-blue-600">
+                    {feature.icon}
+                  </div>
+                  <span className="text-sm font-medium text-gray-700">{feature.text}</span>
+                </div>
+              ))}
+            </div>
 
-          {/* Service Categories */}
-          <div className="mb-12">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-              What are you looking for?
-            </h3>
-            
-            <div className="grid grid-cols-2 gap-4">
+            {/* Category Filters */}
+            <div className="space-y-4">
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => setActiveCategory('all')}
+                  className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                    activeCategory === 'all' 
+                      ? 'bg-gray-900 text-white shadow-lg' 
+                      : 'bg-white text-gray-700 hover:bg-gray-50 shadow-sm border border-gray-200'
+                  }`}
+                >
+                  <Sparkle className="w-4 h-4" />
+                  All Services
+                </button>
+                {(Object.keys(heroConfig.categories) as ServiceCategory[]).map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setActiveCategory(category)}
+                    className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-white transition-all duration-300 shadow-lg ${
+                      activeCategory === category 
+                        ? heroConfig.categories[category].buttonColor + ' shadow-xl scale-105'
+                        : 'bg-gray-400 hover:bg-gray-500'
+                    }`}
+                  >
+                    {heroConfig.categories[category].icon}
+                    {heroConfig.categories[category].name}
+                  </button>
+                ))}
+              </div>
+
+              {/* Category Stats */}
+              {activeCategory !== 'all' && (
+                <div className="flex items-center gap-2 text-sm text-blue-600 font-medium bg-blue-50 px-4 py-2 rounded-lg border border-blue-200 w-fit">
+                  <Clock className="w-4 h-4" />
+                  {heroConfig.categories[activeCategory].stats}
+                </div>
+              )}
+            </div>
+
+            {/* Services Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {filteredServices.map((service, idx) => (
                 <div
                   key={idx}
                   onClick={() => handleServiceClick(service)}
-                  className="relative group cursor-pointer transition-all duration-200"
+                  className="group cursor-pointer transition-all duration-300"
                 >
-                  <div className={`${heroConfig.colors.serviceCard[service.category]} dark:bg-gray-800 dark:hover:bg-gray-700 rounded-xl p-4 h-full transition-all duration-300 group-hover:shadow-lg border border-gray-100 dark:border-gray-700`}>
+                  <div className={`${heroConfig.colors.serviceCard[service.category]} border-2 rounded-2xl p-4 h-full transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 group-hover:border-blue-300 relative overflow-hidden`}>
+                    {/* Background Pattern */}
+                    <div className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-300">
+                      <div className="absolute top-2 right-2 w-8 h-8 bg-current rounded-full"></div>
+                      <div className="absolute bottom-2 left-2 w-4 h-4 bg-current rounded-full"></div>
+                    </div>
+
                     {service.badge && (
-                      <div className={`absolute -top-2 -right-2 px-2 py-1 rounded-full text-xs font-medium ${heroConfig.colors.badge[service.badge.color]}`}>
+                      <div className={`absolute -top-2 -right-2 px-3 py-1 rounded-full text-xs font-bold ${heroConfig.colors.badge[service.badge.color]} z-10`}>
                         {service.badge.text}
                       </div>
                     )}
                     
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-white dark:bg-gray-700 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform shadow-sm">
-                        <img 
-                          src={service.iconSrc || "/placeholder.svg"} 
-                          alt={service.title} 
-                          className="w-6 h-6 object-contain"
-                          onError={(e) => {
-                            e.currentTarget.src = "/placeholder.svg?height=24&width=24&text=" + service.title.charAt(0)
-                          }}
-                        />
+                    <div className="relative z-10">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm border">
+                            <img 
+                              src={service.iconSrc || "/placeholder.svg"} 
+                              alt={service.title} 
+                              className="w-6 h-6 object-contain"
+                            />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-bold text-gray-900 text-base mb-1 truncate">
+                              {service.title}
+                            </h4>
+                            <p className="text-gray-600 text-sm leading-tight">
+                              {service.description}
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-1">
-                          {service.title}
-                        </h4>
-                        <p className="text-gray-500 dark:text-gray-400 text-xs leading-relaxed">
-                          {service.description}
-                        </p>
+
+                      {/* Service Details */}
+                      <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-4">
+                          {service.rating && (
+                            <div className="flex items-center gap-1 text-amber-600">
+                              <Star className="w-4 h-4 fill-current" />
+                              <span className="font-semibold">{service.rating}</span>
+                            </div>
+                          )}
+                          {service.time && (
+                            <div className="flex items-center gap-1 text-gray-500">
+                              <Clock className="w-4 h-4" />
+                              <span>{service.time}</span>
+                            </div>
+                          )}
+                        </div>
+                        {service.price && (
+                          <div className="text-green-600 font-bold">
+                            {service.price}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
 
-          {/* Action Buttons - Both Visible */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={() => router.push('/services')}
-              className="bg-cyan-600 hover:bg-cyan-700 text-white py-3 px-8 rounded-full font-semibold transition-all duration-200 hover:shadow-lg"
-            >
-              {heroConfig.buttons.explore}
-            </button>
-            <button
-              onClick={() => router.push('/contact')}
-              className="border-2 border-cyan-600 hover:bg-cyan-600 text-cyan-600 hover:text-white py-3 px-8 rounded-full font-semibold transition-all duration-200 hover:shadow-lg"
-            >
-              {heroConfig.buttons.contact}
-            </button>
-          </div>
-        </div>
-      </div>
+            {/* Action Buttons & Stats */}
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button
+                  onClick={() => router.push('/services')}
+                  className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white py-4 px-8 rounded-xl font-bold text-lg transition-all duration-300 hover:shadow-2xl hover:scale-105 flex items-center justify-center gap-2"
+                >
+                  <Calendar className="w-5 h-5" />
+                  {heroConfig.buttons.explore}
+                </button>
+                <button
+                  onClick={() => router.push('/contact')}
+                  className="flex-1 border-2 border-blue-600 hover:bg-blue-600 text-blue-600 hover:text-white py-4 px-8 rounded-xl font-bold text-lg transition-all duration-300 hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2"
+                >
+                  <Phone className="w-5 h-5" />
+                  {heroConfig.buttons.contact}
+                </button>
+              </div>
 
-      {/* Right Content - Video Slider */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-12">
-        <div className="relative w-full max-w-lg">
-          {/* Video Container */}
-          <div className="relative w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl bg-black">
-            {/* Video with Fade Effect */}
-            <div className={`relative w-full h-full transition-opacity duration-300 ${fadeClass || 'opacity-100'}`}>
-              <video
-                ref={videoRef}
-                key={currentSlideData.id}
-                className="w-full h-full object-cover"
-                poster={currentSlideData.poster}
-                playsInline
-                loop
-                muted
-                autoPlay
-              >
-                <source src={currentSlideData.videoUrl} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-              
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-              
-              {/* Content Overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                <div className="inline-block bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium mb-3">
-                  {heroConfig.categories[currentSlideData.category].name}
-                </div>
-                <h3 className="text-xl font-bold mb-2">
-                  {currentSlideData.title}
-                </h3>
-                <p className="text-white/90 text-sm">
-                  {currentSlideData.description}
-                </p>
+              {/* Stats Grid */}
+              <div className="grid grid-cols-4 gap-4 p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200/50 shadow-sm">
+                {heroConfig.stats.map((stat, index) => (
+                  <div key={index} className="text-center">
+                    <div className="text-xl font-bold text-gray-900">{stat.value}</div>
+                    <div className="text-xs text-gray-600 mt-1">{stat.label}</div>
+                  </div>
+                ))}
               </div>
             </div>
-
-            {/* Navigation Controls */}
-            <button
-              onClick={() => navigateSlide('prev')}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 z-10"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            
-            <button
-              onClick={() => navigateSlide('next')}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 z-10"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
           </div>
 
-          {/* Slide Indicators - Outside Container */}
-          <div className="flex justify-center gap-2 mt-6">
-            {heroConfig.videoSlides.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => navigateSlide(idx)}
-                className={`h-2 rounded-full transition-all duration-200 ${
-                  idx === currentSlide 
-                    ? 'bg-cyan-600 w-8' 
-                    : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 w-2'
-                }`}
-              />
-            ))}
-          </div>
+          {/* Right Content - Video Slider */}
+          <div className="flex items-center justify-center lg:justify-end">
+            <div className="relative w-full max-w-lg">
+              {/* Video Container */}
+              <div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl bg-black group">
+                {/* Video with Fade Effect */}
+                <div className={`relative w-full h-full transition-opacity duration-500 ${fadeClass || 'opacity-100'}`}>
+                  <video
+                    ref={videoRef}
+                    key={currentSlideData.id}
+                    className="w-full h-full object-cover"
+                    poster={currentSlideData.poster}
+                    playsInline
+                    loop
+                    muted
+                    autoPlay
+                  >
+                    <source src={currentSlideData.videoUrl} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                  
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  
+                  {/* Content Overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
+                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-lg px-4 py-2 rounded-full text-sm font-semibold mb-4 border border-white/30">
+                      <Play className="w-4 h-4" />
+                      {heroConfig.categories[currentSlideData.category].name}
+                    </div>
+                    <h3 className="text-2xl font-bold mb-3">
+                      {currentSlideData.title}
+                    </h3>
+                    <p className="text-white/90 text-base mb-4 leading-relaxed">
+                      {currentSlideData.description}
+                    </p>
+                    
+                    {/* Features List */}
+                    <div className="flex flex-wrap gap-2">
+                      {currentSlideData.features.map((feature, index) => (
+                        <div key={index} className="flex items-center gap-1 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-xs border border-white/20">
+                          <CheckCircle className="w-3 h-3" />
+                          {feature}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
 
-          {/* Decorative Elements */}
-          <div className="absolute -top-4 -right-4 w-20 h-20 bg-cyan-100 dark:bg-cyan-900/30 rounded-full -z-10" />
-          <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-pink-100 dark:bg-pink-900/30 rounded-full -z-10" />
+                {/* Navigation Controls */}
+                <button
+                  onClick={() => navigateSlide('prev')}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-lg hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300 z-10 opacity-0 group-hover:opacity-100 hover:scale-110 border border-white/30"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                
+                <button
+                  onClick={() => navigateSlide('next')}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-lg hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300 z-10 opacity-0 group-hover:opacity-100 hover:scale-110 border border-white/30"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+
+                {/* Download App Button */}
+                <div className="absolute top-6 right-6">
+                  <button className="flex items-center gap-2 bg-black/50 backdrop-blur-lg hover:bg-black/70 text-white px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 border border-white/20 hover:scale-105">
+                    <MessageCircle className="w-4 h-4" />
+                    Download App
+                  </button>
+                </div>
+              </div>
+
+              {/* Slide Indicators */}
+              <div className="flex justify-center gap-2 mt-6">
+                {heroConfig.videoSlides.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => navigateSlide(idx)}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      idx === currentSlide 
+                        ? 'bg-gradient-to-r from-blue-500 to-cyan-500 w-8 shadow-lg shadow-blue-500/50' 
+                        : 'bg-gray-300 hover:bg-gray-400 w-2'
+                    }`}
+                  />
+                ))}
+              </div>
+
+              {/* Floating Elements */}
+              <div className="absolute -z-10 -top-6 -right-6 w-24 h-24 bg-blue-200/30 rounded-full blur-xl"></div>
+              <div className="absolute -z-10 -bottom-6 -left-6 w-20 h-20 bg-purple-200/30 rounded-full blur-xl"></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
