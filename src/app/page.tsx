@@ -40,46 +40,25 @@ const MemoizedNavBar = memo(NavBar)
 const MemoizedSlider = memo(Slider)
 const MemoizedHeroSection = memo(HeroSection)
 
-// Service Intro Component
+// Service Intro Component - Made more compact
 const ServiceIntro = ({ title, subtitle, gradient }: { title: string; subtitle: string; gradient: string }) => (
-  <div className="py-16 bg-gradient-to-br from-white via-gray-50 to-gray-100 relative overflow-hidden border-b border-gray-200">
-    <div className="absolute inset-0">
-      {Array.from({ length: 20 }).map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-2 h-2 bg-gray-300/50 rounded-full"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-          }}
-          animate={{
-            opacity: [0, 1, 0],
-            scale: [0, 1, 0],
-          }}
-          transition={{
-            duration: 3 + Math.random() * 2,
-            repeat: Number.POSITIVE_INFINITY,
-            delay: Math.random() * 2,
-          }}
-        />
-      ))}
-    </div>
-    <div className="container mx-auto px-4 text-center relative z-10">
+  <div className="py-12 bg-white border-b border-gray-100">
+    <div className="container mx-auto px-4 text-center">
       <motion.h2
-        className={`text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}
-        initial={{ opacity: 0, y: 30 }}
+        className={`text-3xl md:text-5xl font-bold mb-3 bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.5 }}
-        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
       >
         {title}
       </motion.h2>
       <motion.p
-        className="text-xl text-gray-600 max-w-2xl mx-auto"
-        initial={{ opacity: 0, y: 20 }}
+        className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed"
+        initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.5 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.1 }}
       >
         {subtitle}
       </motion.p>
@@ -90,7 +69,6 @@ const ServiceIntro = ({ title, subtitle, gradient }: { title: string; subtitle: 
 export default function Home() {
   const [activeSection, setActiveSection] = useState("hero")
   const [isLoading, setIsLoading] = useState(true)
-  const [scrollDirection, setScrollDirection] = useState("down")
   const [lastScrollY, setLastScrollY] = useState(0)
 
   const heroRef = useRef<HTMLDivElement>(null)
@@ -100,40 +78,9 @@ export default function Home() {
   const testimonialsRef = useRef<HTMLDivElement>(null)
   const footerRef = useRef<HTMLDivElement>(null)
 
-  const { scrollY, scrollYProgress } = useScroll()
-  const smoothScrollProgress = useSpring(scrollYProgress, { damping: 20, stiffness: 100 })
-
   const handleLoadingComplete = useCallback(() => {
     setIsLoading(false)
   }, [])
-
-  // Optimized scroll handler with throttling
-  const handleScroll = useCallback(() => {
-    const currentScrollY = window.scrollY
-    if (currentScrollY > lastScrollY) {
-      setScrollDirection("down")
-    } else {
-      setScrollDirection("up")
-    }
-    setLastScrollY(currentScrollY)
-
-  }, [lastScrollY])
-
-  useEffect(() => {
-    let ticking = false
-    const throttledScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          handleScroll()
-          ticking = false
-        })
-        ticking = true
-      }
-    }
-
-    window.addEventListener("scroll", throttledScroll, { passive: true })
-    return () => window.removeEventListener("scroll", throttledScroll)
-  }, [handleScroll])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -142,7 +89,7 @@ export default function Home() {
     return () => clearTimeout(timer)
   }, [handleLoadingComplete])
 
-  // Service data
+  // Service data - kept all your original data
   const carServices = [
     {
       id: 1,
@@ -150,7 +97,7 @@ export default function Home() {
       description: "Reliable pickup and drop-off services",
       image: "https://images.pexels.com/photos/358319/pexels-photo-358319.jpeg",
       path: "/services/airport-transfer",
-      icon: <Navigation className="h-10 w-10 text-blue-500" />,
+      icon: <Navigation className="h-6 w-6 text-blue-500" />,
     },
     {
       id: 2,
@@ -158,7 +105,7 @@ export default function Home() {
       description: "Explore the city with our guided tours",
       image: "https://images.pexels.com/photos/1545743/pexels-photo-1545743.jpeg",
       path: "/services/city-tours",
-      icon: <MapPin className="h-10 w-10 text-blue-500" />,
+      icon: <MapPin className="h-6 w-6 text-blue-500" />,
     },
     {
       id: 3,
@@ -166,7 +113,7 @@ export default function Home() {
       description: "Professional transportation for business",
       image: "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg",
       path: "/services/corporate-travel",
-      icon: <Users className="h-10 w-10 text-blue-500" />,
+      icon: <Users className="h-6 w-6 text-blue-500" />,
     },
     {
       id: 4,
@@ -174,7 +121,7 @@ export default function Home() {
       description: "Premium vehicles for special occasions",
       image: "https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg",
       path: "/services/luxury-rides",
-      icon: <Award className="h-10 w-10 text-blue-500" />,
+      icon: <Award className="h-6 w-6 text-blue-500" />,
     },
   ]
 
@@ -185,7 +132,7 @@ export default function Home() {
       description: "Professional cleaning for all home spaces",
       image: "https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg",
       path: "/services/home-cleaning",
-      icon: <CheckCircle className="h-10 w-10 text-amber-500" />,
+      icon: <CheckCircle className="h-6 w-6 text-amber-500" />,
     },
     {
       id: 2,
@@ -193,7 +140,7 @@ export default function Home() {
       description: "Keep your workspace spotless and productive",
       image: "https://images.pexels.com/photos/3768911/pexels-photo-3768911.jpeg",
       path: "/services/office-cleaning",
-      icon: <Zap className="h-10 w-10 text-amber-500" />,
+      icon: <Zap className="h-6 w-6 text-amber-500" />,
     },
     {
       id: 3,
@@ -201,7 +148,7 @@ export default function Home() {
       description: "Thorough sanitization for a healthier environment",
       image: "https://images.pexels.com/photos/4239091/pexels-photo-4239091.jpeg",
       path: "/services/deep-cleaning",
-      icon: <Shield className="h-10 w-10 text-amber-500" />,
+      icon: <Shield className="h-6 w-6 text-amber-500" />,
     },
     {
       id: 4,
@@ -209,7 +156,7 @@ export default function Home() {
       description: "Sustainable solutions that protect your family and the planet",
       image: "https://images.pexels.com/photos/5217912/pexels-photo-5217912.jpeg",
       path: "/services/eco-cleaning",
-      icon: <Droplet className="h-10 w-10 text-amber-500" />,
+      icon: <Droplet className="h-6 w-6 text-amber-500" />,
     },
   ]
 
@@ -220,7 +167,7 @@ export default function Home() {
       description: "Professional care for your furry companions",
       image: "https://images.pexels.com/photos/6568956/pexels-photo-6568956.jpeg",
       path: "/services/pet-grooming",
-      icon: <Award className="h-10 w-10 text-indigo-500" />,
+      icon: <Award className="h-6 w-6 text-indigo-500" />,
     },
     {
       id: 2,
@@ -228,7 +175,7 @@ export default function Home() {
       description: "Expert cuts and styles for a fresh look",
       image: "https://images.pexels.com/photos/3993447/pexels-photo-3993447.jpeg",
       path: "/services/hair-styling",
-      icon: <Sparkles className="h-10 w-10 text-indigo-500" />,
+      icon: <Sparkles className="h-6 w-6 text-indigo-500" />,
     },
     {
       id: 3,
@@ -236,7 +183,7 @@ export default function Home() {
       description: "Manicures and pedicures for healthy, beautiful nails",
       image: "https://images.pexels.com/photos/939836/pexels-photo-939836.jpeg",
       path: "/services/nail-care",
-      icon: <Clock className="h-10 w-10 text-indigo-500" />,
+      icon: <Clock className="h-6 w-6 text-indigo-500" />,
     },
     {
       id: 4,
@@ -244,7 +191,7 @@ export default function Home() {
       description: "Relaxing treatments for total rejuvenation",
       image: "https://images.pexels.com/photos/3997993/pexels-photo-3997993.jpeg",
       path: "/services/spa-services",
-      icon: <Shield className="h-10 w-10 text-indigo-500" />,
+      icon: <Shield className="h-6 w-6 text-indigo-500" />,
     },
   ]
 
@@ -387,302 +334,178 @@ if (isLoading) {
     </div>
   )
 }
+
   return (
-    <div className="min-h-screen mt-5 bg-white overflow-hidden">
+    <div className="min-h-screen bg-white overflow-hidden">
       {/* Fixed navigation */}
       <MemoizedNavBar />
 
-{/* Enhanced Section Indicator */}
-<div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-50 hidden md:block">
-  <div className="flex flex-col items-center space-y-6">
-    {[
-      { id: "hero", label: "Welcome" },
-      { id: "car", label: "Taxi" },
-      { id: "cleaning", label: "Clean" },
-      { id: "grooming", label: "Groom" },
-      { id: "testimonials", label: "Reviews" },
-      { id: "footer", label: "Contact" }
-    ].map(({ id, label }) => (
-      <div key={id} className="relative group">
-        <button
-          onClick={() => {
-            const element = document.getElementById(id + "-section")
-            if (element) {
-              element.scrollIntoView({ behavior: "smooth" })
-              setActiveSection(id)
-            }
-          }}
-          className={`w-4 h-4 rounded-full transition-all duration-300 border-2
-            ${activeSection === id
-              ? "border-indigo-500 bg-gradient-to-r from-indigo-500 to-purple-400 shadow-lg"
-              : "border-gray-300 bg-white hover:bg-gray-100 shadow-sm"
-            }`}
-          aria-label={`Scroll to ${label} section`}
-        />
-
-
-
-        {/* Active indicator (only visible when active) */}
-        {activeSection === id && (
-          <motion.div
-            className="absolute right-11 top-1/2 transform -translate-y-1/2 px-3 py-1.5 rounded-lg uppercase
-              bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs font-semibold
-              shadow-[0_0_15px_rgba(99,102,241,0.3)] border border-white/20 backdrop-blur-sm"
-            initial={{ opacity: 0, x: 20, scale: 0.8 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 10, scale: 0.8 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
-          >
-            {label}
-          </motion.div>
-        )}
-      </div>
-    ))}
-  </div>
-</div>
-
-      {/* Hero Section */}
-      <div id="hero-section" ref={heroRef} className="relative">
-        <div className="min-h-screen relative">
-          <div className="absolute inset-0 z-0">
-            <Image
-              src="/photo-collage.png.png"
-              alt="Background"
-              className="w-full h-full object-cover"
-              width={1920}
-              height={1080}
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-white/90 to-gray-100/90"></div>
-          </div>
-          <div className="relative z-10">
-            <MemoizedHeroSection />
-          </div>
+      {/* Compact Section Indicator */}
+      <div className="fixed right-4 top-1/2 transform -translate-y-1/2 z-40 hidden md:block">
+        <div className="flex flex-col items-center space-y-4">
+          {[
+            { id: "hero", label: "Home" },
+            { id: "car", label: "Rides" },
+            { id: "cleaning", label: "Clean" },
+            { id: "grooming", label: "Groom" },
+            { id: "testimonials", label: "Reviews" },
+          ].map(({ id, label }) => (
+            <div key={id} className="relative group">
+              <button
+                onClick={() => {
+                  const element = document.getElementById(id + "-section")
+                  if (element) {
+                    element.scrollIntoView({ behavior: "smooth" })
+                    setActiveSection(id)
+                  }
+                }}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  activeSection === id
+                    ? "bg-blue-500 scale-125 shadow-lg shadow-blue-500/30"
+                    : "bg-gray-300 hover:bg-gray-400 scale-100"
+                }`}
+                aria-label={`Scroll to ${label} section`}
+              />
+              
+              {/* Tooltip */}
+              <div className="absolute right-6 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                <div className="bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                  {label}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Car Services Section */}
+      {/* Hero Section */}
+      <div id="hero-section" ref={heroRef} className="relative bg-white mt-5">
+        <MemoizedHeroSection />
+      </div>
+
+      {/* Car Services Section - Compact Urban Company Style */}
       <div
         id="car-section"
         ref={carRef}
-        className="relative w-full min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 overflow-hidden"
+        className="relative w-full py-16 bg-gray-50"
       >
-        {/* Animated floating elements background */}
-        <div className="absolute inset-0 overflow-hidden">
-          {Array.from({ length: 25 }).map((_, i) => {
-            const size = Math.random() * 120 + 30
-            const duration = Math.random() * 15 + 15
-            return (
+        <ServiceIntro 
+          title="Premium Car Services" 
+          subtitle="Reliable transportation with luxury vehicles and professional drivers"
+          gradient="from-blue-500 to-cyan-500"
+        />
+        
+        <div className="container mx-auto px-4 mt-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left Column - Main Content */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* 3D View */}
               <motion.div
-                key={i}
-                className="absolute rounded-full bg-gradient-to-br from-blue-200/30 to-cyan-200/30 backdrop-blur-[1px]"
-                initial={{
-                  x: Math.random() * 100,
-                  y: Math.random() * 100,
-                  width: size,
-                  height: size,
-                  rotate: Math.random() * 360,
-                }}
-                animate={{
-                  y: [0, Math.random() * 100 - 50],
-                  x: [0, Math.random() * 100 - 50],
-                  rotate: [0, 180, 360],
-                }}
-                transition={{
-                  duration: duration,
-                  repeat: Number.POSITIVE_INFINITY,
-                  repeatType: "reverse",
-                  ease: "easeInOut",
-                }}
-              />
-            )
-          })}
-        </div>
-
-        {/* Main content container */}
-        <div className="relative z-10 container mx-auto px-4 py-12 h-full flex items-center">
-          <motion.div
-            className="w-full bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl shadow-blue-100/50 border border-blue-200/50 overflow-hidden"
-            initial={{ opacity: 0, scale: 0.98 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {/* Three-column layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 h-full divide-x divide-blue-100/50">
-              {/* Left Column - Content & 3D View */}
-              <motion.div
-                className="p-8 md:p-10 flex flex-col h-full"
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.6, delay: 0.2, ease: "backOut" }}
+                className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
               >
-                <div className="mb-8">
-                  <motion.div
-                    className="flex items-center mb-6"
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    <div className="p-2 rounded-lg bg-blue-100/50 backdrop-blur-sm border border-blue-200/30">
-                      <Car className="h-6 w-6 text-blue-500" />
-                    </div>
-                    <h1 className="ml-3 text-2xl font-bold text-blue-600">
-                      EliteCars
-                    </h1>
-                  </motion.div>
-                  <motion.h2
-                    className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 leading-tight"
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                  >
-                    Premium <span className="text-blue-500">Car</span> Services
-                  </motion.h2>
-                  <motion.p
-                    className="text-gray-600 text-lg max-w-md"
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                  >
-                    Professional transportation services with luxury vehicles, experienced drivers, and 24/7
-                    availability for all your travel needs.
-                  </motion.p>
+                <div className="flex items-center mb-4">
+                  <div className="p-2 rounded-lg bg-blue-50 mr-3">
+                    <Car className="h-6 w-6 text-blue-500" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900">Our Fleet</h3>
                 </div>
-
-                {/* Enhanced 3D View Container with Image Placeholder */}
-                <motion.div
-                  className="flex-1 min-h-[300px] rounded-xl overflow-hidden mb-6 border border-blue-200/50 shadow-inner shadow-blue-100/30 relative"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
-                >
+                <div className="aspect-video rounded-xl bg-gray-100 overflow-hidden">
                   <CarThreeDView />
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 }}
-                >
-                  <Link
-                    href="/bike-taxi"
-                    className="group relative w-full md:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium shadow-lg hover:shadow-blue-400/40 transition-all duration-300 overflow-hidden"
-                  >
-                    <span className="relative z-10 flex items-center">
-                      Book Your Ride
-                      <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </span>
-                    <span className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                  </Link>
-                </motion.div>
+                </div>
               </motion.div>
 
-              {/* Middle Column - Photo Gallery */}
+              {/* Services Grid */}
               <motion.div
-                className="h-full flex flex-col relative"
-                initial={{ opacity: 0, y: 30 }}
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.6, delay: 0.4, ease: "backOut" }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-b from-blue-50/10 via-transparent to-blue-50/10 z-10 pointer-events-none" />
-                <div className="h-full w-full p-4">
+                {carServices.map((service, index) => (
+                  <motion.div
+                    key={service.id}
+                    className="bg-white rounded-xl p-6 border border-gray-200 hover:border-blue-300 transition-colors group cursor-pointer"
+                    whileHover={{ y: -2 }}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <div className="flex items-start space-x-4">
+                      <div className="p-3 rounded-lg bg-blue-50 group-hover:bg-blue-100 transition-colors">
+                        {service.icon}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-900 mb-2">{service.name}</h4>
+                        <p className="text-gray-600 text-sm mb-3">{service.description}</p>
+                        <Link 
+                          href={service.path}
+                          className="inline-flex items-center text-blue-500 hover:text-blue-600 text-sm font-medium"
+                        >
+                          Book now <ArrowRight className="ml-1 w-4 h-4" />
+                        </Link>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Right Column - Gallery and Features */}
+            <div className="space-y-8">
+              {/* Photo Gallery */}
+              <motion.div
+                className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm"
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+              >
+                <h3 className="text-lg font-bold text-gray-900 mb-4">Gallery</h3>
+                <div className="aspect-square rounded-lg overflow-hidden">
                   <CarPhotoGallery />
                 </div>
               </motion.div>
 
-              {/* Right Column - Features */}
+              {/* Features */}
               <motion.div
-                className="p-8 md:p-10 bg-blue-50/30 backdrop-blur-sm"
-                initial={{ opacity: 0, x: 30 }}
+                className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm"
+                initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.6, delay: 0.6, ease: "backOut" }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
               >
-                <motion.h3
-                  className="text-2xl font-bold text-gray-800 mb-8"
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 }}
-                >
-                  Why Choose Us
-                </motion.h3>
-
-                <div className="space-y-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-4">Why Choose Us</h3>
+                <div className="space-y-4">
                   {[
-                    {
-                      icon: <ShieldCheck className="w-5 h-5 text-blue-500" />,
-                      title: "Licensed Drivers",
-                      description: "Professional, background-verified chauffeurs with years of experience",
-                      color: "from-blue-100/50 to-blue-200/50",
-                    },
-                    {
-                      icon: <Car className="w-5 h-5 text-blue-500" />,
-                      title: "Luxury Fleet",
-                      description: "Premium vehicles maintained to the highest standards",
-                      color: "from-cyan-100/50 to-cyan-200/50",
-                    },
-                    {
-                      icon: <Clock className="w-5 h-5 text-blue-500" />,
-                      title: "24/7 Service",
-                      description: "Round-the-clock availability for all your transportation needs",
-                      color: "from-emerald-100/50 to-emerald-200/50",
-                    },
-                  ].map((feature, i) => (
+                    { icon: ShieldCheck, title: "Verified Drivers", desc: "Background-checked professionals" },
+                    { icon: Clock, title: "24/7 Service", desc: "Always available when you need" },
+                    { icon: Award, title: "Luxury Fleet", desc: "Premium maintained vehicles" },
+                  ].map((feature, index) => (
                     <motion.div
-                      key={i}
-                      className={`p-4 rounded-xl bg-gradient-to-br ${feature.color} backdrop-blur-sm border border-blue-200/30 hover:border-blue-300/50 transition-all duration-300 relative overflow-hidden`}
-                      initial={{ opacity: 0, y: 20 }}
+                      key={feature.title}
+                      className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                      initial={{ opacity: 0, y: 10 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: false }}
-                      transition={{ duration: 0.4, delay: 0.8 + i * 0.1 }}
-                      whileHover={{
-                        y: -5,
-                        boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.1)",
-                      }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.4 + index * 0.1 }}
                     >
-                      <div className="flex items-start relative z-10">
-                        <div className="p-2 rounded-lg bg-blue-100/50 mr-3 border border-blue-200/30">
-                          {feature.icon}
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-gray-800">{feature.title}</h4>
-                          <p className="text-sm text-gray-600 mt-1">{feature.description}</p>
-                        </div>
+                      <div className="p-2 rounded-lg bg-blue-50">
+                        <feature.icon className="h-5 w-5 text-blue-500" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-gray-900 text-sm">{feature.title}</h4>
+                        <p className="text-gray-600 text-xs">{feature.desc}</p>
                       </div>
                     </motion.div>
                   ))}
                 </div>
-
-                <motion.div
-                  className="mt-8 p-5 rounded-xl bg-gradient-to-br from-blue-100/30 to-transparent border border-blue-200/30"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: false }}
-                  transition={{ duration: 0.5, delay: 1.4 }}
-                >
-                  <h4 className="font-semibold text-gray-800 mb-4">Our Car Services</h4>
-                  <div className="grid grid-cols-2 gap-3">
-                    {carServices.map((service) => (
-                      <motion.div
-                        key={service.id}
-                        className="p-3 rounded-lg bg-blue-100/30 border border-blue-200/30 hover:border-blue-300/50 transition-all duration-300"
-                        whileHover={{ y: -2, boxShadow: "0 10px 15px -3px rgba(59, 130, 246, 0.1)" }}
-                      >
-                        <div className="flex items-center mb-2">
-                          <div className="mr-3 text-blue-500">{service.icon}</div>
-                          <h5 className="font-medium text-gray-800 text-sm">{service.name}</h5>
-                        </div>
-                        <p className="text-xs text-gray-600">{service.description}</p>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
               </motion.div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
 
@@ -690,444 +513,251 @@ if (isLoading) {
       <div
         id="cleaning-section"
         ref={cleaningRef}
-        className="relative w-full min-h-screen bg-gradient-to-br from-amber-50 to-yellow-50 overflow-hidden"
+        className="relative w-full py-16 bg-white"
       >
-        {/* Animated floating bubbles background */}
-        <div className="absolute inset-0 overflow-hidden">
-          {Array.from({ length: 25 }).map((_, i) => {
-            const size = Math.random() * 120 + 30
-            const duration = Math.random() * 15 + 15
-            return (
+        <ServiceIntro 
+          title="Professional Cleaning" 
+          subtitle="Eco-friendly cleaning solutions for homes and offices"
+          gradient="from-amber-500 to-orange-500"
+        />
+        
+        <div className="container mx-auto px-4 mt-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left Column - Main Content */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* 3D View */}
               <motion.div
-                key={i}
-                className="absolute rounded-full bg-gradient-to-br from-amber-200/30 to-yellow-200/30 backdrop-blur-[1px]"
-                initial={{
-                  x: Math.random() * 100,
-                  y: Math.random() * 100,
-                  width: size,
-                  height: size,
-                  rotate: Math.random() * 360,
-                }}
-                animate={{
-                  y: [0, Math.random() * 100 - 50],
-                  x: [0, Math.random() * 100 - 50],
-                  rotate: [0, 180, 360],
-                }}
-                transition={{
-                  duration: duration,
-                  repeat: Number.POSITIVE_INFINITY,
-                  repeatType: "reverse",
-                  ease: "easeInOut",
-                }}
-              />
-            )
-          })}
-        </div>
-
-        {/* Main content container */}
-        <div className="relative z-10 container mx-auto px-4 py-12 h-full flex items-center">
-          <motion.div
-            className="w-full bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl shadow-amber-100/50 border border-amber-200/50 overflow-hidden"
-            initial={{ opacity: 0, scale: 0.98 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {/* Three-column layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 h-full divide-x divide-amber-100/50">
-              {/* Left Column - Content & 3D View */}
-              <motion.div
-                className="p-8 md:p-10 flex flex-col h-full"
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.6, delay: 0.2, ease: "backOut" }}
+                className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
               >
-                <div className="mb-8">
-                  <motion.div
-                    className="flex items-center mb-6"
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    <div className="p-2 rounded-lg bg-amber-100/50 backdrop-blur-sm border border-amber-200/30">
-                      <Droplet className="h-6 w-6 text-amber-500" />
-                    </div>
-                    <h1 className="ml-3 text-2xl font-bold text-amber-600">
-                      EcoClean
-                    </h1>
-                  </motion.div>
-                  <motion.h2
-                    className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 leading-tight"
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                  >
-                    Sustainable <span className="text-amber-500">Cleaning</span> Solutions
-                  </motion.h2>
-                  <motion.p
-                    className="text-gray-600 text-lg max-w-md"
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                  >
-                    Our plant-based formulas deliver sparkling clean without harsh chemicals, protecting both your home
-                    and the environment.
-                  </motion.p>
+                <div className="flex items-center mb-4">
+                  <div className="p-2 rounded-lg bg-amber-50 mr-3">
+                    <Droplet className="h-6 w-6 text-amber-500" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900">Our Process</h3>
                 </div>
-
-                {/* Enhanced 3D View Container with Image Placeholder */}
-                <motion.div
-                  className="flex-1 min-h-[300px] rounded-xl overflow-hidden mb-6 border border-amber-200/50 shadow-inner shadow-amber-100/30 relative"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
-                >
+                <div className="aspect-video rounded-xl bg-gray-100 overflow-hidden">
                   <ThreeDView />
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 }}
-                >
-                  <Link
-                    href="/cleaning-details"
-                    className="group relative w-full md:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-medium shadow-lg hover:shadow-amber-400/40 transition-all duration-300 overflow-hidden"
-                  >
-                    <span className="relative z-10 flex items-center">
-                      Explore Our Process
-                      <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </span>
-                    <span className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                  </Link>
-                </motion.div>
+                </div>
               </motion.div>
 
-              {/* Middle Column - Photo Gallery */}
+              {/* Services Grid */}
               <motion.div
-                className="h-full flex flex-col relative"
-                initial={{ opacity: 0, y: 30 }}
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.6, delay: 0.4, ease: "backOut" }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-b from-amber-50/10 via-transparent to-amber-50/10 z-10 pointer-events-none" />
-                <div className="h-full w-full p-4">
+                {cleaningServices.map((service, index) => (
+                  <motion.div
+                    key={service.id}
+                    className="bg-white rounded-xl p-6 border border-gray-200 hover:border-amber-300 transition-colors group cursor-pointer"
+                    whileHover={{ y: -2 }}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <div className="flex items-start space-x-4">
+                      <div className="p-3 rounded-lg bg-amber-50 group-hover:bg-amber-100 transition-colors">
+                        {service.icon}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-900 mb-2">{service.name}</h4>
+                        <p className="text-gray-600 text-sm mb-3">{service.description}</p>
+                        <Link 
+                          href={service.path}
+                          className="inline-flex items-center text-amber-500 hover:text-amber-600 text-sm font-medium"
+                        >
+                          Book now <ArrowRight className="ml-1 w-4 h-4" />
+                        </Link>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Right Column - Gallery and Features */}
+            <div className="space-y-8">
+              {/* Photo Gallery */}
+              <motion.div
+                className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm"
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+              >
+                <h3 className="text-lg font-bold text-gray-900 mb-4">Gallery</h3>
+                <div className="aspect-square rounded-lg overflow-hidden">
                   <PhotoGallery />
                 </div>
               </motion.div>
 
-              {/* Right Column - Features */}
+              {/* Features */}
               <motion.div
-                className="p-8 md:p-10 bg-amber-50/30 backdrop-blur-sm"
-                initial={{ opacity: 0, x: 30 }}
+                className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm"
+                initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.6, delay: 0.6, ease: "backOut" }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
               >
-                <motion.h3
-                  className="text-2xl font-bold text-gray-800 mb-8"
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 }}
-                >
-                  Why Choose Us
-                </motion.h3>
-
-                <div className="space-y-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-4">Why Choose Us</h3>
+                <div className="space-y-4">
                   {[
-                    {
-                      icon: <Leaf className="w-5 h-5 text-lime-500" />,
-                      title: "100% Natural",
-                      description: "Plant-derived ingredients that are safe for your family and pets",
-                      color: "from-lime-100/50 to-lime-200/50",
-                    },
-                    {
-                      icon: <Recycle className="w-5 h-5 text-lime-500" />,
-                      title: "Eco Packaging",
-                      description: "Biodegradable containers that reduce plastic waste",
-                      color: "from-teal-100/50 to-teal-200/50",
-                    },
-                    {
-                      icon: <ShieldCheck className="w-5 h-5 text-lime-500" />,
-                      title: "Proven Results",
-                      description: "Clinically tested to be as effective as chemical cleaners",
-                      color: "from-emerald-100/50 to-emerald-200/50",
-                    },
-                  ].map((feature, i) => (
+                    { icon: Leaf, title: "100% Natural", desc: "Safe for family and pets" },
+                    { icon: Recycle, title: "Eco Packaging", desc: "Environmentally friendly" },
+                    { icon: ShieldCheck, title: "Proven Results", desc: "Clinically tested effective" },
+                  ].map((feature, index) => (
                     <motion.div
-                      key={i}
-                      className={`p-4 rounded-xl bg-gradient-to-br ${feature.color} backdrop-blur-sm border border-amber-200/30 hover:border-amber-300/50 transition-all duration-300 relative overflow-hidden`}
-                      initial={{ opacity: 0, y: 20 }}
+                      key={feature.title}
+                      className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                      initial={{ opacity: 0, y: 10 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: false }}
-                      transition={{ duration: 0.4, delay: 0.8 + i * 0.1 }}
-                      whileHover={{
-                        y: -5,
-                        boxShadow: "0 10px 25px -5px rgba(251, 191, 36, 0.1)",
-                      }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.4 + index * 0.1 }}
                     >
-                      <div className="flex items-start relative z-10">
-                        <div className="p-2 rounded-lg bg-amber-100/50 mr-3 border border-amber-200/30">
-                          {feature.icon}
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-gray-800">{feature.title}</h4>
-                          <p className="text-sm text-gray-600 mt-1">{feature.description}</p>
-                        </div>
+                      <div className="p-2 rounded-lg bg-amber-50">
+                        <feature.icon className="h-5 w-5 text-amber-500" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-gray-900 text-sm">{feature.title}</h4>
+                        <p className="text-gray-600 text-xs">{feature.desc}</p>
                       </div>
                     </motion.div>
                   ))}
                 </div>
-
-                <motion.div
-                  className="mt-8 p-5 rounded-xl bg-gradient-to-br from-amber-100/30 to-transparent border border-amber-200/30"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: false }}
-                  transition={{ duration: 0.5, delay: 1.4 }}
-                >
-                  <h4 className="font-semibold text-gray-800 mb-4">Our Cleaning Services</h4>
-                  <div className="grid grid-cols-2 gap-3">
-                    {cleaningServices.map((service) => (
-                      <motion.div
-                        key={service.id}
-                        className="p-3 rounded-lg bg-amber-100/30 border border-amber-200/30 hover:border-amber-300/50 transition-all duration-300"
-                        whileHover={{ y: -2, boxShadow: "0 10px 15px -3px rgba(251, 191, 36, 0.1)" }}
-                      >
-                        <div className="flex items-center mb-2">
-                          <div className="mr-3 text-amber-500">{service.icon}</div>
-                          <h5 className="font-medium text-gray-800 text-sm">{service.name}</h5>
-                        </div>
-                        <p className="text-xs text-gray-600">{service.description}</p>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
               </motion.div>
             </div>
-          </motion.div>
-        </div>        
+          </div>
+        </div>
       </div>
 
       {/* Grooming Services Section */}
       <div
         id="grooming-section"
         ref={groomingRef}
-        className="relative w-full min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 overflow-hidden"
+        className="relative w-full py-16 bg-gray-50"
       >
-        {/* Animated floating bubbles background */}
-        <div className="absolute inset-0 overflow-hidden">
-          {Array.from({ length: 25 }).map((_, i) => {
-            const size = Math.random() * 120 + 30
-            const duration = Math.random() * 15 + 15
-            return (
+        <ServiceIntro 
+          title="Expert Grooming" 
+          subtitle="Professional grooming services for perfect styling"
+          gradient="from-indigo-500 to-purple-500"
+        />
+        
+        <div className="container mx-auto px-4 mt-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left Column - Main Content */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* 3D View */}
               <motion.div
-                key={i}
-                className="absolute rounded-full bg-gradient-to-br from-indigo-200/30 to-blue-200/30 backdrop-blur-[1px]"
-                initial={{
-                  x: Math.random() * 100,
-                  y: Math.random() * 100,
-                  width: size,
-                  height: size,
-                  rotate: Math.random() * 360,
-                }}
-                animate={{
-                  y: [0, Math.random() * 100 - 50],
-                  x: [0, Math.random() * 100 - 50],
-                  rotate: [0, 180, 360],
-                }}
-                transition={{
-                  duration: duration,
-                  repeat: Number.POSITIVE_INFINITY,
-                  repeatType: "reverse",
-                  ease: "easeInOut",
-                }}
-              />
-            )
-          })}
-        </div>
-
-        {/* Main content container */}
-        <div className="relative z-10 container mx-auto px-4 py-12 h-full flex items-center">
-          <motion.div
-            className="w-full bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl shadow-indigo-100/50 border border-indigo-200/50 overflow-hidden"
-            initial={{ opacity: 0, scale: 0.98 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {/* Three-column layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 h-full divide-x divide-indigo-100/50">
-              {/* Left Column - Content & 3D View */}
-              <motion.div
-                className="p-8 md:p-10 flex flex-col h-full"
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.6, delay: 0.2, ease: "backOut" }}
-              >
-                <div className="mb-8">
-                  <motion.div
-                    className="flex items-center mb-6"
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    <div className="p-2 rounded-lg bg-indigo-100/50 backdrop-blur-sm border border-indigo-200/30">
-                      <Scissors className="h-6 w-6 text-indigo-500" />
-                    </div>
-                    <h1 className="ml-3 text-2xl font-bold text-indigo-600">
-                      EliteGroom
-                    </h1>
-                  </motion.div>
-                  <motion.h2
-                    className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 leading-tight"
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                  >
-                    Precision <span className="text-indigo-500">Grooming</span> Services
-                  </motion.h2>
-                  <motion.p
-                    className="text-gray-600 text-lg max-w-md"
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                  >
-                    Our professional grooming techniques deliver a polished, refined look tailored to your style and
-                    preferences.
-                  </motion.p>
-                </div>
-                {/* Enhanced 3D View Container with Image Placeholder */}
-                <motion.div
-                  className="flex-1 min-h-[300px] rounded-xl overflow-hidden mb-6 border border-indigo-200/50 shadow-inner shadow-indigo-100/30 relative"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
-                >
-                   <GroomingThreeDView />            
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 }}
-                >
-                  <Link
-                    href="/grooming-details"
-                    className="group relative w-full md:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-medium shadow-lg hover:shadow-indigo-400/40 transition-all duration-300 overflow-hidden"
-                  >
-                    <span className="relative z-10 flex items-center">
-                      Book Appointment
-                      <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </span>
-                    <span className="absolute inset-0 bg-gradient-to-r from-indigo-400 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                  </Link>
-                </motion.div>
-              </motion.div>
-              {/* Middle Column - Photo Gallery */}
-              <motion.div
-                className="h-full flex flex-col relative"
-                initial={{ opacity: 0, y: 30 }}
+                className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.6, delay: 0.4, ease: "backOut" }}
+                viewport={{ once: true }}
               >
-                <div className="absolute inset-0 bg-gradient-to-b from-indigo-50/10 via-transparent to-indigo-50/10 z-10 pointer-events-none" />
-                <div className="h-full w-full p-4">
+                <div className="flex items-center mb-4">
+                  <div className="p-2 rounded-lg bg-indigo-50 mr-3">
+                    <Scissors className="h-6 w-6 text-indigo-500" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900">Our Studio</h3>
+                </div>
+                <div className="aspect-video rounded-xl bg-gray-100 overflow-hidden">
+                  <GroomingThreeDView />
+                </div>
+              </motion.div>
+
+              {/* Services Grid */}
+              <motion.div
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+              >
+                {groomingServices.map((service, index) => (
+                  <motion.div
+                    key={service.id}
+                    className="bg-white rounded-xl p-6 border border-gray-200 hover:border-indigo-300 transition-colors group cursor-pointer"
+                    whileHover={{ y: -2 }}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <div className="flex items-start space-x-4">
+                      <div className="p-3 rounded-lg bg-indigo-50 group-hover:bg-indigo-100 transition-colors">
+                        {service.icon}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-900 mb-2">{service.name}</h4>
+                        <p className="text-gray-600 text-sm mb-3">{service.description}</p>
+                        <Link 
+                          href={service.path}
+                          className="inline-flex items-center text-indigo-500 hover:text-indigo-600 text-sm font-medium"
+                        >
+                          Book now <ArrowRight className="ml-1 w-4 h-4" />
+                        </Link>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Right Column - Gallery and Features */}
+            <div className="space-y-8">
+              {/* Photo Gallery */}
+              <motion.div
+                className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm"
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+              >
+                <h3 className="text-lg font-bold text-gray-900 mb-4">Gallery</h3>
+                <div className="aspect-square rounded-lg overflow-hidden">
                   <GroomingPhotoGallery />
                 </div>
               </motion.div>
-              {/* Right Column - Features */}
+
+              {/* Features */}
               <motion.div
-                className="p-8 md:p-10 bg-indigo-50/30 backdrop-blur-sm"
-                initial={{ opacity: 0, x: 30 }}
+                className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm"
+                initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.6, delay: 0.6, ease: "backOut" }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
               >
-                <motion.h3
-                  className="text-2xl font-bold text-gray-800 mb-8"
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 }}
-                >
-                  Why Choose Us
-                </motion.h3>
-                <div className="space-y-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-4">Why Choose Us</h3>
+                <div className="space-y-4">
                   {[
-                    {
-                      icon: <Scissors className="w-5 h-5 text-indigo-500" />,
-                      title: "Precision Cuts",
-                      description: "Master barbers trained in the latest techniques for perfect styling",
-                      color: "from-indigo-100/50 to-indigo-200/50",
-                    },
-                    {
-                      icon: <Shield className="w-5 h-5 text-indigo-500" />,
-                      title: "Hygienic Tools",
-                      description: "Sterilized equipment and single-use products for your safety",
-                      color: "from-blue-100/50 to-blue-200/50",
-                    },
-                    {
-                      icon: <Award className="w-5 h-5 text-indigo-500" />,
-                      title: "Premium Products",
-                      description: "Luxury grooming products for lasting results and protection",
-                      color: "from-violet-100/50 to-violet-200/50",
-                    },
-                  ].map((feature, i) => (
+                    { icon: Scissors, title: "Precision Cuts", desc: "Expert stylists with latest techniques" },
+                    { icon: Shield, title: "Hygienic Tools", desc: "Sterilized equipment for safety" },
+                    { icon: Award, title: "Premium Products", desc: "Luxury products for best results" },
+                  ].map((feature, index) => (
                     <motion.div
-                      key={i}
-                      className={`p-4 rounded-xl bg-gradient-to-br ${feature.color} backdrop-blur-sm border border-indigo-200/30 hover:border-indigo-300/50 transition-all duration-300 relative overflow-hidden`}
-                      initial={{ opacity: 0, y: 20 }}
+                      key={feature.title}
+                      className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                      initial={{ opacity: 0, y: 10 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: false }}
-                      transition={{ duration: 0.4, delay: 0.8 + i * 0.1 }}
-                      whileHover={{
-                        y: -5,
-                        boxShadow: "0 10px 25px -5px rgba(99, 102, 241, 0.1)",
-                      }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.4 + index * 0.1 }}
                     >
-                      <div className="flex items-start relative z-10">
-                        <div className="p-2 rounded-lg bg-indigo-100/50 mr-3 border border-indigo-200/30">
-                          {feature.icon}
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-gray-800">{feature.title}</h4>
-                          <p className="text-sm text-gray-600 mt-1">{feature.description}</p>
-                        </div>
+                      <div className="p-2 rounded-lg bg-indigo-50">
+                        <feature.icon className="h-5 w-5 text-indigo-500" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-gray-900 text-sm">{feature.title}</h4>
+                        <p className="text-gray-600 text-xs">{feature.desc}</p>
                       </div>
                     </motion.div>
                   ))}
                 </div>
-
-                <motion.div
-                  className="mt-8 p-5 rounded-xl bg-gradient-to-br from-indigo-100/30 to-transparent border border-indigo-200/30"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: false }}
-                  transition={{ duration: 0.5, delay: 1.4 }}
-                >
-                  <h4 className="font-semibold text-gray-800 mb-4">Our Grooming Services</h4>
-                  <div className="grid grid-cols-2 gap-3">
-                    {groomingServices.map((service) => (
-                      <motion.div
-                        key={service.id}
-                        className="p-3 rounded-lg bg-indigo-100/30 border border-indigo-200/30 hover:border-indigo-300/50 transition-all duration-300"
-                        whileHover={{ y: -2, boxShadow: "0 10px 15px -3px rgba(99, 102, 241, 0.1)" }}
-                      >
-                        <div className="flex items-center mb-2">
-                          <div className="mr-3 text-indigo-500">{service.icon}</div>
-                          <h5 className="font-medium text-gray-800 text-sm">{service.name}</h5>
-                        </div>
-                        <p className="text-xs text-gray-600">{service.description}</p>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
               </motion.div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
 
@@ -1135,85 +765,51 @@ if (isLoading) {
       <div
         id="testimonials-section"
         ref={testimonialsRef}
-        className="py-20 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden"
+        className="py-16 bg-white"
       >
-        <div className="max-w-7xl mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-4">
           <motion.div
-            className="text-center mb-16"
+            className="text-center mb-12"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
           >
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">What Our Clients Say</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Customer Reviews</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
               Hear from our satisfied customers about their experience with our services
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((item, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {testimonials.map((testimonial, index) => (
               <motion.div
-                key={item.id}
-                className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden border border-gray-100"
-                initial={{ opacity: 0, y: 50 }}
+                key={testimonial.id}
+                className="bg-white rounded-2xl p-6 border border-gray-200 hover:border-blue-300 transition-colors"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -5 }}
               >
-                <div className="flex items-center mb-4 relative z-10">
-                  <motion.div
-                    className="h-12 w-12 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white font-bold text-lg"
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  >
-                    {item.initials}
-                  </motion.div>
+                <div className="flex items-center mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                    {testimonial.initials}
+                  </div>
                   <div className="ml-4">
-                    <h3 className="font-semibold text-gray-800">{item.name}</h3>
+                    <h3 className="font-semibold text-gray-900">{testimonial.name}</h3>
                     <div className="flex">
-                      {Array.from({ length: item.rating }).map((_, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.3 + i * 0.1 }}
-                        >
-                          <Star className="h-4 w-4 text-amber-400 fill-amber-400" />
-                        </motion.div>
+                      {Array.from({ length: testimonial.rating }).map((_, i) => (
+                        <Star key={i} className="h-4 w-4 text-amber-400 fill-amber-400" />
                       ))}
                     </div>
                   </div>
                 </div>
-                <motion.p
-                  className="text-gray-600 italic relative z-10"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: false }}
-                  transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
-                >
-                  {item.text}
-                </motion.p>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {testimonial.text}
+                </p>
               </motion.div>
             ))}
           </div>
-
-          <motion.div
-            className="mt-16 text-center"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            <Link
-              href="/testimonials"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-medium shadow-lg hover:shadow-blue-400/30 transition-all duration-300 group"
-            >
-              <span>Read More Reviews</span>
-              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </motion.div>
         </div>
       </div>
 
@@ -1221,50 +817,35 @@ if (isLoading) {
       <footer
         id="footer-section"
         ref={footerRef}
-        className="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 text-gray-800 relative overflow-hidden border-t border-gray-200"
+        className="bg-gray-900 text-white py-12"
       >
-        <div className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Company info */}
-            <motion.div
-              className="backdrop-blur-sm bg-white/50 rounded-2xl p-6 border border-gray-200 shadow-lg"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="flex items-center mb-6">
-                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-cyan-300 to-blue-400 flex items-center justify-center">
-                  <Droplet className="h-5 w-5 text-white" />
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {/* Company Info */}
+            <div className="md:col-span-2">
+              <div className="flex items-center mb-4">
+                <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
+                  <Sparkles className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="ml-3 text-xl font-bold text-gray-800">
-                  EliteServices
-                </h3>
+                <h3 className="text-xl font-bold">EliteServices</h3>
               </div>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-400 mb-6 max-w-md">
                 Premium car services, eco-friendly cleaning, and professional grooming solutions for modern lifestyles.
               </p>
               <div className="flex space-x-4">
-                {["facebook", "instagram", "twitter"].map((social) => (
-                  <motion.a
+                {["Facebook", "Instagram", "Twitter"].map((social) => (
+                  <a
                     key={social}
                     href="#"
-                    className="text-gray-500 hover:text-gray-800 transition-colors duration-300"
-                    whileHover={{ scale: 1.2, rotate: [0, 5, -5, 0] }}
-                    transition={{ duration: 0.3 }}
+                    className="text-gray-400 hover:text-white transition-colors"
                   >
-                    <span className="sr-only">{social}</span>
-                    <div className="h-8 w-8 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center hover:from-cyan-400 hover:to-blue-500 transition-all duration-300">
-                      {social === "facebook" && <span className="text-sm font-bold text-white">f</span>}
-                      {social === "instagram" && <span className="text-sm font-bold text-white">i</span>}
-                      {social === "twitter" && <span className="text-sm font-bold text-white">t</span>}
-                    </div>
-                  </motion.a>
+                    {social}
+                  </a>
                 ))}
               </div>
-            </motion.div>
+            </div>
 
-            {/* Quick links columns */}
+            {/* Quick Links */}
             {[
               {
                 title: "Services",
@@ -1272,127 +853,46 @@ if (isLoading) {
                   { name: "Car Services", href: "/car-services" },
                   { name: "Cleaning Services", href: "/cleaning-services" },
                   { name: "Grooming Services", href: "/grooming-services" },
-                  { name: "Airport Transfer", href: "/services/airport-transfer" },
-                  { name: "Deep Cleaning", href: "/services/deep-cleaning" },
                 ],
-                icon: <CheckCircle className="h-5 w-5" />,
-                gradient: "from-blue-300 to-cyan-400",
               },
               {
                 title: "Company",
                 links: [
                   { name: "About Us", href: "/about" },
-                  { name: "Our Team", href: "/team" },
-                  { name: "Blog", href: "/blog" },
-                  { name: "Careers", href: "/careers" },
                   { name: "Contact", href: "/contact" },
+                  { name: "Careers", href: "/careers" },
                 ],
-                icon: <Star className="h-5 w-5" />,
-                gradient: "from-amber-300 to-orange-400",
               },
               {
                 title: "Support",
                 links: [
                   { name: "Help Center", href: "/help" },
-                  { name: "Booking Guide", href: "/booking-guide" },
                   { name: "Privacy Policy", href: "/privacy" },
                   { name: "Terms of Service", href: "/terms" },
-                  { name: "FAQ", href: "/faq" },
                 ],
-                icon: <ShieldCheck className="h-5 w-5" />,
-                gradient: "from-indigo-300 to-blue-400",
               },
-            ].map((column, colIndex) => (
-              <motion.div
-                key={column.title}
-                className="backdrop-blur-sm bg-white/50 rounded-2xl p-6 border border-gray-200 shadow-lg"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false }}
-                transition={{ duration: 0.5, delay: 0.1 + colIndex * 0.1 }}
-              >
-                <div className="flex items-center mb-6">
-                  <div
-                    className={`h-8 w-8 rounded-full bg-gradient-to-br ${column.gradient} flex items-center justify-center text-white`}
-                  >
-                    {column.icon}
-                  </div>
-                  <h3 className="ml-3 text-lg font-bold text-gray-800">{column.title}</h3>
-                </div>
-                <ul className="space-y-3">
-                  {column.links.map((link, linkIndex) => (
-                    <motion.li
-                      key={link.name}
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: false }}
-                      transition={{ duration: 0.3, delay: 0.3 + linkIndex * 0.05 + colIndex * 0.1 }}
-                    >
+            ].map((column, index) => (
+              <div key={column.title}>
+                <h4 className="font-semibold mb-4 text-white">{column.title}</h4>
+                <ul className="space-y-2">
+                  {column.links.map((link) => (
+                    <li key={link.name}>
                       <Link
                         href={link.href}
-                        className="text-gray-600 hover:text-gray-800 transition-colors duration-300 flex items-center group"
+                        className="text-gray-400 hover:text-white transition-colors text-sm"
                       >
-                        <div className="h-1.5 w-1.5 rounded-full bg-gray-400 mr-2 group-hover:bg-gray-600 transition-colors duration-300"></div>
-                        <span className="group-hover:translate-x-1 transition-transform">{link.name}</span>
+                        {link.name}
                       </Link>
-                    </motion.li>
+                    </li>
                   ))}
                 </ul>
-              </motion.div>
+              </div>
             ))}
           </div>
 
-          {/* Newsletter subscription */}
-          <motion.div
-            className="mt-12 backdrop-blur-lg bg-white/50 rounded-2xl p-6 border border-gray-200 shadow-lg"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-              <div className="lg:col-span-1">
-                <h3 className="text-xl font-bold mb-2 text-gray-800">Stay Updated</h3>
-                <p className="text-gray-600">Subscribe to our newsletter for exclusive offers and service updates.</p>
-              </div>
-              <div className="lg:col-span-2">
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="flex-1 px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                  />
-                  <button className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-medium hover:from-cyan-500 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-cyan-400/25">
-                    Subscribe
-                  </button>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Bottom bar */}
-          <motion.div
-            className="mt-12 pt-8 border-t border-gray-200 text-center text-gray-500 relative"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: false }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-          >
-            <div className="flex flex-col md:flex-row justify-between items-center">
-              <p>© 2025 EliteServices. All rights reserved.</p>
-              <div className="flex space-x-6 mt-4 md:mt-0">
-                <Link href="/privacy" className="text-gray-500 hover:text-gray-800 transition-colors">
-                  Privacy Policy
-                </Link>
-                <Link href="/terms" className="text-gray-500 hover:text-gray-800 transition-colors">
-                  Terms of Service
-                </Link>
-                <Link href="/cookies" className="text-gray-500 hover:text-gray-800 transition-colors">
-                  Cookie Policy
-                </Link>
-              </div>
-            </div>
-          </motion.div>
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p className="text-sm">&copy; 2025 EliteServices. All rights reserved.</p>
+          </div>
         </div>
       </footer>
     </div>
