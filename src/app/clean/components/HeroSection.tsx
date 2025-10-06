@@ -45,6 +45,8 @@ interface VideoSlide {
   poster: string
   category: ServiceCategory
   features: string[]
+  thumbnail: string // Added this
+  images: string[] // Added this - array of image URLs for grid
 }
 
 interface CategoryConfig {
@@ -99,7 +101,7 @@ const heroConfig: HeroConfig = {
       textColor: "text-blue-700"
     },
     title: "Experience premium services",
-titleHighlight: "right to your door",
+    titleHighlight: "in Taxi,cleaning,grooming",
     highlightColor: "text-blue-600",
     description: "Experience the convenience of professional home services. Book experts for cleaning, grooming, and transportation with guaranteed satisfaction."
   }, 
@@ -131,7 +133,7 @@ titleHighlight: "right to your door",
       category: 'bike',
       rating: 4.9,
       time: '5-10 min',
-      price: '₹99 onwards',
+      price: 'Explore Now',
       badge: {
         text: 'Fast',
         color: 'green'
@@ -139,7 +141,7 @@ titleHighlight: "right to your door",
     },
     {
       title: 'Elite Membership',
-      iconSrc: '/car1.png',
+      iconSrc: '/membership.png',
       description: 'Exclusive benefits & priority service',
       category: 'bike',
       rating: 4.8,
@@ -147,12 +149,12 @@ titleHighlight: "right to your door",
     },
     {
       title: 'Deep Home Cleaning',
-      iconSrc: '/house-cleaning.png',
+      iconSrc: '/housecl.png',
       description: 'Complete home sanitization',
       category: 'cleaning',
       rating: 4.9,
       time: '2-3 hours',
-      price: '₹499',
+      price: 'Explore Now',
       badge: {
         text: 'Popular',
         color: 'red'
@@ -160,12 +162,12 @@ titleHighlight: "right to your door",
     },
     {
       title: 'Car Detailing',
-      iconSrc: '/car.png',
+      iconSrc: '/car-det.png',
       description: 'Premium interior & exterior cleaning',
       category: 'cleaning',
       rating: 4.7,
       time: '1-2 hours',
-      price: '₹799'
+      price: 'Explore Now'
     },
     {
       title: 'Hair Styling',
@@ -174,7 +176,7 @@ titleHighlight: "right to your door",
       category: 'grooming',
       rating: 4.9,
       time: '45 min',
-      price: '₹299',
+      price: 'Explore Now',
       badge: {
         text: 'Trending',
         color: 'purple'
@@ -187,7 +189,7 @@ titleHighlight: "right to your door",
       category: 'grooming',
       rating: 4.8,
       time: '1 hour',
-      price: '₹599'
+      price: 'Explore Now'
     }
   ],
   videoSlides: [
@@ -196,9 +198,15 @@ titleHighlight: "right to your door",
       title: 'Luxury Grooming Experience',
       description: 'Professional stylists with premium products at your doorstep',
       videoUrl: '/groom.mp4',
-      poster: '/home-salon-service.png',
+      poster: '/man-gr.png',
       category: 'grooming',
-      features: ['Expert Stylists', 'Premium Products', 'Home Service']
+      features: ['Expert Stylists', 'Premium Products', 'Home Service'],
+      thumbnail: '/gr2.jpg', // Added
+      images: [ // Added - multiple images for grid
+        '/gr1.jpg',
+        '/nail.jpg',
+        '/pet.jpg'
+      ]
     },
     {
       id: 2,
@@ -207,16 +215,28 @@ titleHighlight: "right to your door",
       videoUrl: '/clea.mp4',
       poster: '/cleaning-poster.jpg',
       category: 'cleaning',
-      features: ['Eco-Friendly', 'Trained Staff', 'Spotless Guarantee']
+      features: ['Eco-Friendly', 'Trained Staff', 'Spotless Guarantee'],
+      thumbnail: '/Kitchen-Cleaning-Services.jpg',
+      images: [ 
+        '/house 2.jpeg',
+        '/Kitchen-Cleaning-Services. 2jpg.jpg',
+        '/Kitchen-Cleaning-Services.jpg'
+      ]
     },
     {
       id: 3,
       title: 'Premium Rides',
       description: 'Luxury cars with professional chauffeurs',
       videoUrl: '/taxi.mp4',
-      poster: '/bike-poster.jpg',
+      poster: '/bike.png',
       category: 'bike',
-      features: ['Luxury Cars', 'Professional Drivers', '24/7 Service']
+      features: ['Luxury Cars', 'Professional Drivers', '24/7 Service'],
+      thumbnail: '/c22.jpeg', // Added
+      images: [ // Added
+        '/c33.jpeg',
+        '/c1.png',
+        '/c22.jpeg'
+      ]
     }
   ],
   buttons: {
@@ -331,25 +351,20 @@ const HeroSection = () => {
           {/* Left Content - Services */}
           <div className="flex flex-col justify-center space-y-8">
             {/* Header Section */}
-            <div className="space-y-6">
-              <div className={`inline-flex items-center gap-2 ${heroConfig.header.badge.bgColor} ${heroConfig.header.badge.textColor} px-4 py-2 rounded-full font-medium border border-blue-200/50 backdrop-blur-sm`}>
-                {heroConfig.header.badge.icon}
-                <span className="text-sm">{heroConfig.header.badge.text}</span>
-              </div>
+            <div className="space-y-10 mt-8">
 
-<div className="space-y-4">
-  <div className="flex items-baseline flex-wrap">
-    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight whitespace-nowrap">
-      {heroConfig.header.title}{' '}
-      <span className={`${heroConfig.header.highlightColor} bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent`}>
-        {heroConfig.header.titleHighlight}
-      </span>
-    </h1>
-  </div>
-  <p className="text-gray-600 text-lg md:text-xl max-w-lg leading-relaxed">
-    {heroConfig.header.description}
-  </p>
-</div>
+              <div className="space-y-8">
+<h1 className="text-4xl md:text-5xl lg:text-5xl font-bold text-gray-900 leading-tight whitespace-nowrap">
+  {heroConfig.header.title}{' '}
+  <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+    {heroConfig.header.titleHighlight}
+  </span>
+</h1>
+
+                <p className="text-gray-600 text-lg md:text-xl max-w-lg leading-relaxed">
+                  {heroConfig.header.description}
+                </p>
+              </div>
             </div>
 
             {/* Features Grid */}
@@ -504,97 +519,108 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Right Content - Video Slider */}
+          {/* Right Content - Grid Banner */}
           <div className="flex items-center justify-center lg:justify-end">
-            <div className="relative w-full max-w-lg">
-              {/* Video Container */}
-              <div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl bg-black group">
-                {/* Video with Fade Effect */}
-                <div className={`relative w-full h-full transition-opacity duration-500 ${fadeClass || 'opacity-100'}`}>
-                  <video
-                    ref={videoRef}
-                    key={currentSlideData.id}
-                    className="w-full h-full object-cover"
-                    poster={currentSlideData.poster}
-                    playsInline
-                    loop
-                    muted
-                    autoPlay
-                  >
-                    <source src={currentSlideData.videoUrl} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                  
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  
-                  {/* Content Overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-lg px-4 py-2 rounded-full text-sm font-semibold mb-4 border border-white/30">
-                      <Play className="w-4 h-4" />
-                      {heroConfig.categories[currentSlideData.category].name}
+            <div className="relative w-full max-w-4xl">
+              {/* Grid Banner Container */}
+              <div className="grid grid-cols-2 grid-rows-2 gap-4 aspect-square rounded-3xl overflow-hidden shadow-2xl">
+                
+                {/* Main Featured Item - Top Left */}
+                <div className="relative col-span-1 row-span-2 rounded-2xl overflow-hidden group cursor-pointer">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-blue-600/20 z-10" />
+                  <img 
+                    src={currentSlideData.images[0] || currentSlideData.poster} 
+                    alt="Featured"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white z-20">
+                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-lg px-3 py-1 rounded-full text-xs font-semibold mb-2 border border-white/30">
+                      <Play className="w-3 h-3" />
+                      Featured
                     </div>
-                    <h3 className="text-2xl font-bold mb-3">
-                      {currentSlideData.title}
-                    </h3>
-                    <p className="text-white/90 text-base mb-4 leading-relaxed">
+                    <h3 className="text-xl font-bold mb-2">{currentSlideData.title}</h3>
+                    <p className="text-white/80 text-sm leading-relaxed line-clamp-2">
                       {currentSlideData.description}
                     </p>
-                    
-                    {/* Features List */}
-                    <div className="flex flex-wrap gap-2">
-                      {currentSlideData.features.map((feature, index) => (
-                        <div key={index} className="flex items-center gap-1 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-xs border border-white/20">
-                          <CheckCircle className="w-3 h-3" />
-                          {feature}
-                        </div>
-                      ))}
+                  </div>
+                </div>
+
+                {/* Top Right Grid Item */}
+                <div className="relative rounded-2xl overflow-hidden group cursor-pointer">
+                  <img 
+                    src={currentSlideData.images[1] || currentSlideData.poster} 
+                    alt="Feature 1"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                    <div className="flex items-center gap-1 mb-1">
+                      <CheckCircle className="w-3 h-3 text-green-400" />
+                      <span className="text-xs font-medium">{currentSlideData.features[0]}</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Navigation Controls */}
-                <button
-                  onClick={() => navigateSlide('prev')}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-lg hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300 z-10 opacity-0 group-hover:opacity-100 hover:scale-110 border border-white/30"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-                
-                <button
-                  onClick={() => navigateSlide('next')}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-lg hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300 z-10 opacity-0 group-hover:opacity-100 hover:scale-110 border border-white/30"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
+                {/* Bottom Right Grid Item */}
+                <div className="relative rounded-2xl overflow-hidden group cursor-pointer">
+                  <img 
+                    src={currentSlideData.images[2] || currentSlideData.poster} 
+                    alt="Feature 2"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                    <div className="flex items-center gap-1 mb-1">
+                      <CheckCircle className="w-3 h-3 text-green-400" />
+                      <span className="text-xs font-medium">{currentSlideData.features[1]}</span>
+                    </div>
+                  </div>
+                </div>
 
-                {/* Download App Button */}
-                <div className="absolute top-6 right-6">
-                  <button className="flex items-center gap-2 bg-black/50 backdrop-blur-lg hover:bg-black/70 text-white px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 border border-white/20 hover:scale-105">
+                {/* Floating Action Button */}
+                <div className="absolute top-4 right-4 z-30">
+                  <button className="flex items-center gap-2 bg-black/50 backdrop-blur-lg hover:bg-black/70 text-white px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 border border-white/20 hover:scale-105 shadow-lg">
                     <MessageCircle className="w-4 h-4" />
                     Download App
                   </button>
                 </div>
               </div>
 
-              {/* Slide Indicators */}
-              <div className="flex justify-center gap-2 mt-6">
-                {heroConfig.videoSlides.map((_, idx) => (
+              {/* Interactive Navigation Grid */}
+              <div className="grid grid-cols-3 gap-3 mt-6">
+                {heroConfig.videoSlides.map((slide, idx) => (
                   <button
                     key={idx}
                     onClick={() => navigateSlide(idx)}
-                    className={`h-2 rounded-full transition-all duration-300 ${
+                    className={`relative aspect-video rounded-xl overflow-hidden transition-all duration-300 ${
                       idx === currentSlide 
-                        ? 'bg-gradient-to-r from-blue-500 to-cyan-500 w-8 shadow-lg shadow-blue-500/50' 
-                        : 'bg-gray-300 hover:bg-gray-400 w-2'
+                        ? 'ring-2 ring-blue-500 ring-offset-2 scale-105 shadow-lg' 
+                        : 'opacity-80 hover:opacity-100 hover:scale-102'
                     }`}
-                  />
+                  >
+                    <img 
+                      src={slide.thumbnail || slide.poster} 
+                      alt={`Slide ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className={`absolute inset-0 ${
+                      idx === currentSlide ? 'bg-blue-500/20' : 'bg-black/40'
+                    }`} />
+                    <div className="absolute bottom-1 left-1 right-1">
+                      <div className={`h-1 rounded-full ${
+                        idx === currentSlide 
+                          ? 'bg-gradient-to-r from-blue-500 to-cyan-500' 
+                          : 'bg-white/40'
+                      }`} />
+                    </div>
+                  </button>
                 ))}
               </div>
 
-              {/* Floating Elements */}
-              <div className="absolute -z-10 -top-6 -right-6 w-24 h-24 bg-blue-200/30 rounded-full blur-xl"></div>
-              <div className="absolute -z-10 -bottom-6 -left-6 w-20 h-20 bg-purple-200/30 rounded-full blur-xl"></div>
+              {/* Animated Background Elements */}
+              <div className="absolute -z-10 -top-8 -right-8 w-32 h-32 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-2xl animate-pulse"></div>
+              <div className="absolute -z-10 -bottom-8 -left-8 w-28 h-28 bg-gradient-to-r from-cyan-400/20 to-emerald-400/20 rounded-full blur-2xl animate-pulse delay-1000"></div>
+              <div className="absolute -z-10 top-1/2 -left-12 w-16 h-16 bg-orange-400/15 rounded-full blur-xl animate-bounce"></div>
             </div>
           </div>
         </div>

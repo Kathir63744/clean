@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { Menu, X, Home, Info, Phone, Settings, Search } from 'lucide-react';
 import { motion, AnimatePresence } from "framer-motion";
 import { clsx as cn } from 'clsx';
-import Slider from "./Slider";
 
 const PLACEHOLDER_TEXTS = [
   "Cleaning...",
@@ -23,8 +22,8 @@ const SearchBar = ({ currentSection, isMobile = false }: SearchBarProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const [query, setQuery] = useState("");
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
-  const [placeholderText, setPlaceholderText] = useState(PLACEHOLDER_TEXTS[0]);
 
+  // Fix hydration by using useEffect for dynamic content
   useEffect(() => {
     const interval = setInterval(() => {
       setPlaceholderIndex((prev) => (prev + 1) % PLACEHOLDER_TEXTS.length);
@@ -32,21 +31,6 @@ const SearchBar = ({ currentSection, isMobile = false }: SearchBarProps) => {
 
     return () => clearInterval(interval);
   }, []);
-
-  useEffect(() => {
-    let charIndex = 0;
-    const currentText = PLACEHOLDER_TEXTS[placeholderIndex];
-    const typingInterval = setInterval(() => {
-      if (charIndex <= currentText.length) {
-        setPlaceholderText(currentText.substring(0, charIndex));
-        charIndex++;
-      } else {
-        clearInterval(typingInterval);
-      }
-    }, 50);
-
-    return () => clearInterval(typingInterval);
-  }, [placeholderIndex]);
 
   const getSearchStyle = () => {
     switch(currentSection) {
@@ -117,6 +101,7 @@ const SearchBar = ({ currentSection, isMobile = false }: SearchBarProps) => {
   };
 
   const styles = getSearchStyle();
+  const placeholderText = PLACEHOLDER_TEXTS[placeholderIndex];
 
   return (
     <div className={cn(
@@ -141,7 +126,7 @@ const SearchBar = ({ currentSection, isMobile = false }: SearchBarProps) => {
           styles.bg,
           styles.border,
           styles.text,
-          styles.placeholder,
+          "placeholder-gray-500",
           styles.shadow,
           "focus:ring-1 focus:ring-opacity-50 focus:ring-cyan-400/50"
         )}
@@ -153,8 +138,14 @@ const SearchBar = ({ currentSection, isMobile = false }: SearchBarProps) => {
 const NavBar = () => {
   const [scrollSection, setScrollSection] = useState<string>("default");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
   
+  // Fix hydration by setting mounted state
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const getPageTheme = () => {
     if (pathname.includes('/grooming')) return 'grooming';
     if (pathname.includes('/cleaning')) return 'cleaning';
@@ -203,9 +194,12 @@ const NavBar = () => {
       }
     };
     
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    // Only add event listener on client side
+    if (isMounted) {
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
+  }, [isMounted]);
  
   useEffect(() => {
     setIsMenuOpen(false);
@@ -287,9 +281,22 @@ const NavBar = () => {
   const menuItems = [
     { name: "Home", path: "/", icon: <Home className="w-4 h-4" /> },
     { name: "About Us", path: "/about", icon: <Info className="w-4 h-4" /> },
-    { name: "Services", path: "/services", icon: <Settings className="w-4 h-4" /> },
+    { name: "Services", path: "/service-page", icon: <Settings className="w-4 h-4" /> },
     { name: "Contact", path: "/contact", icon: <Phone className="w-4 h-4" /> }
   ];
+
+  // Don't render until mounted to avoid hydration mismatch
+  if (!isMounted) {
+    return (
+      <div className="w-full bg-gradient-to-r from-indigo-950/90 to-gray-900/90 text-white fixed top-0 left-0 z-50 shadow-md">
+        <div className="relative flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
+          <div className="flex-shrink-0 w-1/5">
+            <div className="text-lg font-semibold font-serif">Clean</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className={`w-full ${getNavbarStyle()} fixed top-0 left-0 z-50 transition-colors duration-500 shadow-md`}>
@@ -330,7 +337,7 @@ const NavBar = () => {
                 <Link 
                   href={item.path} 
                   className={cn(
-                    "p-2 font-mono text-sm transition-all duration-300 hover:opacity-80 relative group flex items-center gap-1",
+                    "p-2 font-mono text-[16px] transition-all duration-300 hover:opacity-80 relative group flex items-center gap-1",
                     pathname === item.path ? "font-bold" : "",
                     scrollSection === "products" ? "text-gray-800" : "text-white"
                   )}
@@ -446,9 +453,6 @@ const NavBar = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="">
-        <Slider/>
-      </div>
     </div>
   );
 };
